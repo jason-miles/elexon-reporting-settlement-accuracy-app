@@ -6,7 +6,7 @@
 # MAGIC
 # MAGIC **Prerequisites:** Gold consumption_half_hourly has data.
 # MAGIC
-# MAGIC **Runtime:** For best compatibility, use a cluster with **Databricks Runtime for ML** (MLflow is pre-installed). If you use a standard runtime and install MLflow via the notebook, you may see "Core Python package version(s) changed"—if so, **detach and re-attach** the notebook to reset the environment, then re-run.
+# MAGIC **Runtime:** Prefer **Databricks Runtime for ML** (MLflow pre-installed). On standard runtime: run the **%pip + restart** cell once, then run from the **import** cell (do not run pip and imports in the same cell). The Unity Catalog MLflow config is omitted (not supported on serverless).
 
 # COMMAND ----------
 
@@ -16,26 +16,14 @@ MLFLOW_EXPERIMENT = "/Shared/elexon_anomaly"
 
 # COMMAND ----------
 
-# Fix "cannot import name 'Sentinel' from 'typing_extensions'": base env often has an old copy.
-# (1) Upgrade in current env; (2) Restart Python so imports use upgraded packages. Then re-run from the import cell below.
-%pip install --upgrade --force-reinstall "typing_extensions>=4.0" mlflow --quiet
+# Cell 3: Use %pip (not !pip), then restart Python so the next cell sees upgraded packages.
+# Run this cell once, then run the import cell below (or re-run notebook from the import cell).
+%pip install --upgrade typing_extensions mlflow
 dbutils.library.restartPython()
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC **If the import cell below still fails with "cannot import name 'Sentinel'":** the kernel is using the base cluster path. **Uncomment and run the code in the next cell once** to install typing_extensions there, then restart and re-run from the import cell.
-
-# COMMAND ----------
-
-# Run this cell only if Sentinel error persists. Uncomment the 4 lines below, run, then re-run from the import cell.
-# import subprocess, sys
-# base_site = "/databricks/python/lib/python3.10/site-packages"
-# subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade", "--target", base_site, "typing_extensions>=4.0"])
-# dbutils.library.restartPython()
-
-# COMMAND ----------
-
+# Import cell — run this cell after the pip+restart cell above. Do not run pip and imports in the same cell.
 import mlflow
 import mlflow.sklearn
 from sklearn.ensemble import IsolationForest
@@ -44,11 +32,21 @@ from datetime import datetime
 
 # COMMAND ----------
 
-# Read consumption for training (aggregate per mpan + interval for feature vector)
-try:
-    spark.conf.set("spark.databricks.mlflow.trackUnityCatalogExperiments.enabled", "true")
-except Exception:
-    pass  # Config not available on this runtime (e.g. Spark Connect); MLflow will use workspace experiments
+# MAGIC %md
+# MAGIC **If the import cell above still fails with "cannot import name 'Sentinel'":** uncomment and run the next cell once to install typing_extensions into the cluster base path, then restart and re-run from the import cell.
+
+# COMMAND ----------
+
+# Run only if Sentinel error persists. Uncomment the 4 lines below, run, then re-run from the import cell.
+# import subprocess, sys
+# base_site = "/databricks/python/lib/python3.10/site-packages"
+# subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade", "--target", base_site, "typing_extensions>=4.0"])
+# dbutils.library.restartPython()
+
+# COMMAND ----------
+
+# Read consumption for training (aggregate per mpan + interval for feature vector).
+# Do not set spark.databricks.mlflow.trackUnityCatalogExperiments.enabled — it is not supported on serverless compute.
 df = spark.table(f"{CATALOG}.{SCHEMA_GOLD}.consumption_half_hourly")
 # Features: kwh, hour_of_day, day_of_week (from interval_start_ts)
 from pyspark.sql import functions as F
