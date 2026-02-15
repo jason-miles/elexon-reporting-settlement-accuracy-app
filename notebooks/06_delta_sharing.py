@@ -5,6 +5,8 @@
 # MAGIC **Purpose:** Create Delta Share, add curated tables (gold_consumption_curated, gold_anomalies), and document Recipient setup. Simulate Provider vs Recipient visibility in the app.
 # MAGIC
 # MAGIC **Prerequisites:** Gold curated tables exist (00_setup or 03_curate_gold).
+# MAGIC
+# MAGIC **Permission:** Creating a Delta Share requires **CREATE SHARE** on the metastore. If you see `PERMISSION_DENIED`, ask your metastore admin to grant this privilege, or run this notebook as a user with that permission.
 
 # COMMAND ----------
 
@@ -14,19 +16,38 @@ SHARE_NAME = "elexon_consumption_share"
 
 # COMMAND ----------
 
-# Create share (Provider side)
-spark.sql(f"CREATE SHARE IF NOT EXISTS {SHARE_NAME}")
+# Create share (Provider side). Requires CREATE SHARE on metastore.
+share_created = False
+try:
+    spark.sql(f"CREATE SHARE IF NOT EXISTS `{SHARE_NAME}`")
+    share_created = True
+    print(f"Share '{SHARE_NAME}' created or already exists.")
+except Exception as e:
+    err = str(e)
+    if "PERMISSION_DENIED" in err or "CREATE SHARE" in err or "UNAUTHORIZED" in err:
+        print("PERMISSION_DENIED: You need CREATE SHARE on the metastore.")
+        print("Ask your metastore admin to grant it. See notebook header for details.")
+        print("Skipping remaining Delta Sharing cells.")
+    else:
+        raise
 
 # COMMAND ----------
 
-# Add tables to share (only curated, no raw PII)
-spark.sql(f"ALTER SHARE {SHARE_NAME} ADD TABLE {CATALOG}.{SCHEMA_GOLD}.gold_consumption_curated")
-spark.sql(f"ALTER SHARE {SHARE_NAME} ADD TABLE {CATALOG}.{SCHEMA_GOLD}.gold_anomalies")
+# Add tables to share (only curated, no raw PII). Skip if share was not created.
+if share_created:
+    spark.sql(f"ALTER SHARE `{SHARE_NAME}` ADD TABLE {CATALOG}.{SCHEMA_GOLD}.gold_consumption_curated")
+    spark.sql(f"ALTER SHARE `{SHARE_NAME}` ADD TABLE {CATALOG}.{SCHEMA_GOLD}.gold_anomalies")
+    print("Tables added to share.")
+else:
+    print("Skipped (share not created in previous cell).")
 
 # COMMAND ----------
 
-# List share contents
-display(spark.sql(f"SHOW ALL IN SHARE {SHARE_NAME}"))
+# List share contents. Skip if share was not created.
+if share_created:
+    display(spark.sql(f"SHOW ALL IN SHARE `{SHARE_NAME}`"))
+else:
+    print("Skipped (share not created). See Recipient setup section below for when you have permission.")
 
 # COMMAND ----------
 
