@@ -1,10 +1,9 @@
 /**
  * Genie space URL for "Ask a Question" tab.
- * After creating a Genie space in Databricks, get the shareable link from Share → Copy link.
- * Set VITE_GENIE_SPACE_URL when building, or replace the default below.
+ * Direct link to "Genie Room: Elexon Consumption & Anomaly Detection".
+ * Get the exact URL from Databricks: open the Genie space → Share → Copy link.
+ * Override with VITE_GENIE_SPACE_URL when building if needed.
  */
-// Set to your Genie space shareable link (Share → Copy link) after creating the space.
-// Until then, links to the workspace where users can open Genie from the sidebar.
 export const GENIE_SPACE_URL =
   import.meta.env.VITE_GENIE_SPACE_URL ||
-  'https://fevm-elexon-app-for-settlement-acc.cloud.databricks.com/?o=7474654808133980'
+  'https://fevm-elexon-app-for-settlement-acc.cloud.databricks.com/?o=7474654808133980#workspace/Users/jason.miles@databricks.com/Genie%20Room%3A%20Elexon%20Consumption%20%26%20Anomaly%20Detection'
