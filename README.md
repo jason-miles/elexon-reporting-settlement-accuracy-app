@@ -12,6 +12,7 @@ Production-quality Databricks App demo for **Elexon** (GB electricity settlement
 | **frontend** | React app (Consumption Insights & Anomaly Detection) for Databricks App |
 | **data** | Sample/synthetic data generators, schema definitions, reference files |
 | **notebooks** | Databricks notebooks: setup, pipelines, Unity Catalog, ML, Delta Sharing |
+| **databricks.yml** + **resources/** | Databricks Asset Bundles (DABS) — jobs as code |
 
 ---
 

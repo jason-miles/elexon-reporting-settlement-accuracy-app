@@ -7,7 +7,7 @@ Use this script to run a tight, “wow”-style demo for Elexon (internal ops + 
 ## Before the demo (setup, ~10 min)
 
 1. **Workspace:** Use https://fevm-elexon-app-for-settlement-acc.cloud.databricks.com (or your UK South workspace).
-2. **Run once:** Open **Repos** and sync/clone `elexon-reporting-settlement-accuracy-app` (or upload the notebooks).
+2. **Run once:** Open **Repos** and sync/clone `elexon-reporting-settlement-accuracy-app` (Pull to get latest — includes `databricks.yml` and `resources/` for DABS).
 3. **Run in order:**
    - **00_setup** — uses catalog `elexon_app_for_settlement_acc_catalog`, creates schemas (bronze/silver/gold/recipient_shared), tables, roles, synthetic data.
    - **01_ingest_bronze** — (optional) ingest more raw data.
@@ -50,16 +50,26 @@ Use this script to run a tight, “wow”-style demo for Elexon (internal ops + 
 - **Show:** **Provider view** (full gold tables) vs **Recipient view** (only shared curated tables).
 - **Say:** “We use Delta Sharing: the Provider shares curated tables like `gold_consumption_curated` and `gold_anomalies`. The Recipient only sees those — no raw or internal schemas.”
 
-### Minute 6: Back to Databricks (optional)
+### Minute 6: Databricks Asset Bundles (DABS) + Back to Databricks
 
-- In Databricks, briefly show:
-  - **Catalog Explorer:** `elexon_app_for_settlement_acc_catalog` → bronze / silver / gold / recipient_shared.
-  - **MLflow:** experiment and model in **Production**.
-  - **Delta Sharing:** share and added tables (06_delta_sharing output).
+**Show DABS (Infrastructure-as-Code for jobs):**
+
+1. Open the **repo** in Databricks (Repos → `elexon-reporting-settlement-accuracy-app`).
+2. Open **`databricks.yml`** (the bundle config).
+3. Click the **Deployments** icon (rocket/deploy) next to the file.
+4. In the **Bundle resources** pane, you’ll see the jobs: *[Elexon] Setup only* and *[Elexon] Full pipeline (00→06)*.
+5. Click **Deploy** to deploy the bundle to the workspace (if not already deployed).
+6. Click the **Play** icon on *[Elexon] Setup only* (or Full pipeline) to run the job.
+7. **Say:** “Databricks Asset Bundles let us define jobs and pipelines as code in YAML. The same workflow can be deployed from Git, run from the UI, or triggered via CI/CD.”
+
+**Then briefly show:**
+- **Catalog Explorer:** `elexon_app_for_settlement_acc_catalog` → bronze / silver / gold / recipient_shared.
+- **MLflow:** experiment and model in **Production**.
+- **Delta Sharing:** share and added tables (06_delta_sharing output).
 
 ### Minute 7: Close
 
-- **Say:** “We’ve shown medallion pipelines, 48h watermarking and dedupe, ML anomaly detection with MLOps, Unity Catalog governance with purpose-based access and masking, and Delta Sharing. All runnable in your workspace with the repo and notebooks.”
+- **Say:** “We’ve shown medallion pipelines, 48h watermarking and dedupe, ML anomaly detection with MLOps, Unity Catalog governance with purpose-based access and masking, Delta Sharing, and Databricks Asset Bundles for infrastructure-as-code. All runnable in your workspace with the repo and notebooks.”
 
 ---
 

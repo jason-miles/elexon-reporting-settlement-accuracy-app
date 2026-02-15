@@ -1,0 +1,70 @@
+# Elexon medallion pipeline - Part of Databricks Asset Bundles (DABS)
+resources:
+  jobs:
+    elexon_setup_only:
+      name: "[Elexon] Setup only (00_setup)"
+      queue:
+        enabled: true
+      tasks:
+        - task_key: setup
+          notebook_task:
+            notebook_path: notebooks/00_setup.py
+          job_cluster_key: default
+      job_clusters:
+        - job_cluster_key: default
+          new_cluster:
+            spark_version: "14.3.x-scala2.12"
+            node_type_id: "i3.xlarge"
+            num_workers: 1
+
+    elexon_full_pipeline:
+      name: "[Elexon] Full pipeline (00→06)"
+      queue:
+        enabled: true
+      tasks:
+        - task_key: setup
+          notebook_task:
+            notebook_path: notebooks/00_setup.py
+          job_cluster_key: default
+        - task_key: ingest_bronze
+          notebook_task:
+            notebook_path: notebooks/01_ingest_bronze.py
+          job_cluster_key: default
+          depends_on:
+            - task_key: setup
+        - task_key: transform_silver
+          notebook_task:
+            notebook_path: notebooks/02_transform_silver.py
+          job_cluster_key: default
+          depends_on:
+            - task_key: ingest_bronze
+        - task_key: curate_gold
+          notebook_task:
+            notebook_path: notebooks/03_curate_gold.py
+          job_cluster_key: default
+          depends_on:
+            - task_key: transform_silver
+        - task_key: unity_catalog
+          notebook_task:
+            notebook_path: notebooks/04_unity_catalog_governance.py
+          job_cluster_key: default
+          depends_on:
+            - task_key: curate_gold
+        - task_key: ml_anomaly
+          notebook_task:
+            notebook_path: notebooks/05_ml_anomaly_detection.py
+          job_cluster_key: default
+          depends_on:
+            - task_key: unity_catalog
+        - task_key: delta_sharing
+          notebook_task:
+            notebook_path: notebooks/06_delta_sharing.py
+          job_cluster_key: default
+          depends_on:
+            - task_key: ml_anomaly
+      job_clusters:
+        - job_cluster_key: default
+          new_cluster:
+            spark_version: "14.3.x-scala2.12"
+            node_type_id: "i3.xlarge"
+            num_workers: 1

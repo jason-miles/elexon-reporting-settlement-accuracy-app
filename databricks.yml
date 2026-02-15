@@ -1,0 +1,21 @@
+# Databricks Asset Bundles (DABS) - Elexon Consumption Insights
+# Deploy from workspace: open this file → click Deployments icon → Deploy
+# Run jobs: Bundle resources pane → click Play icon on a job
+# See: https://docs.databricks.com/en/dev-tools/bundles/
+
+bundle:
+  name: elexon-consumption-insights
+
+include:
+  - resources/*.yml
+
+targets:
+  dev:
+    default: true
+    mode: development
+    workspace:
+      host: https://fevm-elexon-app-for-settlement-acc.cloud.databricks.com
+  prod:
+    mode: production
+    workspace:
+      host: https://fevm-elexon-app-for-settlement-acc.cloud.databricks.com
