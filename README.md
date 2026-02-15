@@ -67,15 +67,18 @@ See **DEMO_GUIDE.md** for the full 7-minute script.
 - **Region:** UK South (recommended; no hard dependency).  
 - **Git integration:** Linked as **jason.miles@bcs.org.uk**.
 
-### Connect the repo to Databricks (Git integration)
+### Connect the repo to Databricks (Step 2)
 
-1. In Databricks: **Settings → Workspace settings → Git integration**.
-2. **Connect to Git** (or edit existing):
-   - **Provider:** GitHub  
-   - **Git repository URL:** `https://github.com/jason-miles/elexon-reporting-settlement-accuracy-app`  
-   - **Branch:** `main`  
-   - **Personal Access Token:** Create a GitHub PAT with `repo` scope; store in Databricks (or use OAuth if configured).
-3. **Sync:** Choose “Sync” or “Deploy” so the workspace folder (e.g. `/Repos/jason.miles@bcs.org.uk/elexon-reporting-settlement-accuracy-app`) mirrors the repo.
+Git is set up in **two places** (not under Settings → Developer):
+
+1. **Add your GitHub credential:** **Settings** (left panel) → under **User** click **Linked accounts** → **Add Git credential** → choose **GitHub** (link account or paste a Personal Access Token with `repo` scope).
+2. **Clone the repo:** In the left sidebar click **Workspace** (or **Repos**) → go to your folder → **Create** → **Git folder** / **Repo** → Repository URL: `https://github.com/jason-miles/elexon-reporting-settlement-accuracy-app`, branch: `main` → **Create**.
+
+**Detailed steps with UI locations:** see [docs/DATABRICKS_GIT_SETUP.md](docs/DATABRICKS_GIT_SETUP.md).
+
+After the repo is cloned, run the notebooks in order: **00_setup** → **01** → **02** → **03** → **04** → **05** → **06** (from the **notebooks** folder in the repo).
+
+**Repo or 00_setup not updating in Databricks?** Databricks does not auto-sync. You must **Pull** from the repo folder (branch menu → Pull). See [docs/REPO_NOT_UPDATING.md](docs/REPO_NOT_UPDATING.md).
 
 ### Deploy the React app as a Databricks App
 
