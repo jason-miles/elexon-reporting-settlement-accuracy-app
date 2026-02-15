@@ -46,34 +46,62 @@ SCHEMA_SILVER = "silver"
 SCHEMA_GOLD = "gold"
 SCHEMA_RECIPIENT = "recipient_shared"
 
-# Skip creating the catalog (use existing): set True when using elexon_app_for_settle or any existing catalog
+# Skip creating the catalog (use existing): set True when using a catalog that already exists
 CREATE_CATALOG_IN_UI = True
 # Only if creating a new catalog and you need to specify storage path:
 MANAGED_LOCATION = None  # e.g. "abfss://container@storage.dfs.core.windows.net/elexon_demo" or "s3://bucket/elexon_demo"
 
 # COMMAND ----------
 
-# Create catalog and schemas
-if not CREATE_CATALOG_IN_UI:
-    if MANAGED_LOCATION:
-        spark.sql(f"CREATE CATALOG IF NOT EXISTS {CATALOG} MANAGED LOCATION '{MANAGED_LOCATION}'")
+# MAGIC %md
+# MAGIC **If you get "Catalog '...' was not found":** Run the next cell to list catalogs you can use, then set **`CATALOG`** in the Config cell above to one of the names (exact spelling).
+
+# COMMAND ----------
+
+# Uncomment and run to see available catalog names, then set CATALOG in the Config cell to one of them:
+# spark.sql("SHOW CATALOGS").show(100, truncate=False)
+
+# COMMAND ----------
+
+def ensure_catalog_and_schemas():
+    """Create catalog if needed, then create schemas. Handles 'catalog not found' when using existing catalog."""
+    def create_schemas():
+        spark.sql(f"CREATE SCHEMA IF NOT EXISTS {CATALOG}.{SCHEMA_BRONZE}")
+        spark.sql(f"CREATE SCHEMA IF NOT EXISTS {CATALOG}.{SCHEMA_SILVER}")
+        spark.sql(f"CREATE SCHEMA IF NOT EXISTS {CATALOG}.{SCHEMA_GOLD}")
+        spark.sql(f"CREATE SCHEMA IF NOT EXISTS {CATALOG}.{SCHEMA_RECIPIENT}")
+
+    if not CREATE_CATALOG_IN_UI:
+        if MANAGED_LOCATION:
+            spark.sql(f"CREATE CATALOG IF NOT EXISTS {CATALOG} MANAGED LOCATION '{MANAGED_LOCATION}'")
+        else:
+            try:
+                spark.sql(f"CREATE CATALOG IF NOT EXISTS {CATALOG}")
+            except Exception as e:
+                if "Metastore storage root URL does not exist" in str(e) or "MANAGED LOCATION" in str(e):
+                    print("ERROR: Catalog needs a storage location. Set MANAGED_LOCATION in the config cell (e.g. abfss://... or s3://...) or ask your admin to create the catalog.")
+                raise
+        create_schemas()
     else:
         try:
-            spark.sql(f"CREATE CATALOG IF NOT EXISTS {CATALOG}")
+            create_schemas()
         except Exception as e:
-            if "Metastore storage root URL does not exist" in str(e) or "MANAGED LOCATION" in str(e):
-                print("ERROR: Catalog needs a storage location. Do ONE of:")
-                print("  1. Create catalog in UI: Data → Catalog Explorer → Create catalog → name 'elexon_demo' → Default Storage. Then set CREATE_CATALOG_IN_UI = True in the config cell and re-run.")
-                print("  2. Set MANAGED_LOCATION in the config cell to your cloud path (e.g. abfss://... or s3://...) and re-run.")
-            raise
-else:
-    print("Skipping catalog creation (using catalog created in UI).")
+            if "NO_SUCH_CATALOG" in str(e) or "was not found" in str(e):
+                print(f"Catalog '{CATALOG}' not found. Trying to create it...")
+                if MANAGED_LOCATION:
+                    spark.sql(f"CREATE CATALOG IF NOT EXISTS {CATALOG} MANAGED LOCATION '{MANAGED_LOCATION}'")
+                else:
+                    try:
+                        spark.sql(f"CREATE CATALOG IF NOT EXISTS {CATALOG}")
+                    except Exception as e2:
+                        print("ERROR: Could not create catalog. Set MANAGED_LOCATION to your cloud path (e.g. abfss://container@store.dfs.core.windows.net/elexon_demo), or set CATALOG to an existing catalog name. Run: spark.sql('SHOW CATALOGS').show() to list catalogs.")
+                        raise
+                create_schemas()
+            else:
+                raise
+    print("Catalog and schemas created.")
 
-spark.sql(f"CREATE SCHEMA IF NOT EXISTS {CATALOG}.{SCHEMA_BRONZE}")
-spark.sql(f"CREATE SCHEMA IF NOT EXISTS {CATALOG}.{SCHEMA_SILVER}")
-spark.sql(f"CREATE SCHEMA IF NOT EXISTS {CATALOG}.{SCHEMA_GOLD}")
-spark.sql(f"CREATE SCHEMA IF NOT EXISTS {CATALOG}.{SCHEMA_RECIPIENT}")
-print("Catalog and schemas created.")
+ensure_catalog_and_schemas()
 
 # COMMAND ----------
 
