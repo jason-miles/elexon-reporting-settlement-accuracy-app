@@ -41,5 +41,5 @@ df = df.withColumn("_dedupe_key", F.sha2(F.concat_ws("|", "mpan_id", F.col("inte
 # COMMAND ----------
 
 # Write to silver (merge or overwrite for demo)
-df.write.format("delta").mode("overwrite").saveAsTable(f"{CATALOG}.{SCHEMA_SILVER}.{TABLE_CLEANED}")
+df.write.format("delta").option("mergeSchema", "true").mode("overwrite").saveAsTable(f"{CATALOG}.{SCHEMA_SILVER}.{TABLE_CLEANED}")
 print("Silver consumption_cleaned written (deduped, 48h watermark applied).")
