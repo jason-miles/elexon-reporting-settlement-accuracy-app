@@ -12,6 +12,29 @@
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ## If you see "Metastore storage root URL does not exist"
+# MAGIC
+# MAGIC Unity Catalog needs a storage location for the new catalog. Do **one** of the following, then re-run this notebook.
+# MAGIC
+# MAGIC ### Option 1 — Create the catalog in the UI (recommended)
+# MAGIC 1. In the left sidebar, go to **Data** (or **Catalog**) → **Catalog Explorer**.
+# MAGIC 2. Click **Create catalog**.
+# MAGIC 3. **Name:** `elexon_demo`
+# MAGIC 4. Select **Default Storage** (or your assigned default location).
+# MAGIC 5. Click **Create**.
+# MAGIC 6. In the **Config** cell below, set **`CREATE_CATALOG_IN_UI = True`**.
+# MAGIC 7. **Run all** again. The notebook will skip creating the catalog and only create schemas and tables.
+# MAGIC
+# MAGIC ### Option 2 — Use a managed location path
+# MAGIC 1. In the **Config** cell below, set **`MANAGED_LOCATION`** to your cloud path, for example:
+# MAGIC    - **Azure:** `abfss://<container>@<storage-account>.dfs.core.windows.net/elexon_demo`
+# MAGIC    - **AWS:** `s3://<your-bucket>/elexon_demo`
+# MAGIC 2. Get the exact path from your admin or from **Settings → External data** / **Storage**.
+# MAGIC 3. Leave **`CREATE_CATALOG_IN_UI = False`** and **Run all** again.
+
+# COMMAND ----------
+
 # Config: catalog and schemas (medallion + recipient)
 CATALOG = "elexon_demo"
 SCHEMA_BRONZE = "bronze"
@@ -19,10 +42,30 @@ SCHEMA_SILVER = "silver"
 SCHEMA_GOLD = "gold"
 SCHEMA_RECIPIENT = "recipient_shared"
 
+# Catalog storage (only change if you hit "Metastore storage root URL does not exist"):
+# Option 1 — You created "elexon_demo" in Catalog Explorer with Default Storage:
+CREATE_CATALOG_IN_UI = False  # Set to True after creating the catalog in the UI, then re-run.
+# Option 2 — You want to specify a managed location path:
+MANAGED_LOCATION = None  # e.g. "abfss://container@storage.dfs.core.windows.net/elexon_demo" or "s3://bucket/elexon_demo"
+
 # COMMAND ----------
 
 # Create catalog and schemas
-spark.sql(f"CREATE CATALOG IF NOT EXISTS {CATALOG}")
+if not CREATE_CATALOG_IN_UI:
+    if MANAGED_LOCATION:
+        spark.sql(f"CREATE CATALOG IF NOT EXISTS {CATALOG} MANAGED LOCATION '{MANAGED_LOCATION}'")
+    else:
+        try:
+            spark.sql(f"CREATE CATALOG IF NOT EXISTS {CATALOG}")
+        except Exception as e:
+            if "Metastore storage root URL does not exist" in str(e) or "MANAGED LOCATION" in str(e):
+                print("ERROR: Catalog needs a storage location. Do ONE of:")
+                print("  1. Create catalog in UI: Data → Catalog Explorer → Create catalog → name 'elexon_demo' → Default Storage. Then set CREATE_CATALOG_IN_UI = True in the config cell and re-run.")
+                print("  2. Set MANAGED_LOCATION in the config cell to your cloud path (e.g. abfss://... or s3://...) and re-run.")
+            raise
+else:
+    print("Skipping catalog creation (using catalog created in UI).")
+
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS {CATALOG}.{SCHEMA_BRONZE}")
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS {CATALOG}.{SCHEMA_SILVER}")
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS {CATALOG}.{SCHEMA_GOLD}")
