@@ -5,12 +5,20 @@
 # MAGIC **Purpose:** Train Isolation Forest (or similar) on consumption patterns, log with MLflow, register model, promote to Production, run batch/streaming inference to populate anomalies table.
 # MAGIC
 # MAGIC **Prerequisites:** Gold consumption_half_hourly has data.
+# MAGIC
+# MAGIC **Runtime:** For best compatibility, use a cluster with **Databricks Runtime for ML** (MLflow is pre-installed). If you use a standard runtime and install MLflow via the notebook, you may see "Core Python package version(s) changed"—if so, **detach and re-attach** the notebook to reset the environment, then re-run.
 
 # COMMAND ----------
 
 CATALOG = "elexon_app_for_settlement_acc_catalog"
 SCHEMA_GOLD = "gold"
 MLFLOW_EXPERIMENT = "/Shared/elexon_anomaly"
+
+# COMMAND ----------
+
+# Install mlflow and typing_extensions (pydantic_core needs Sentinel from typing_extensions >= 4.0). Run this cell once.
+# If you see "Core Python package version(s) changed", detach and re-attach the notebook, then re-run from the import cell below.
+%pip install "typing_extensions>=4.0" mlflow --quiet
 
 # COMMAND ----------
 
