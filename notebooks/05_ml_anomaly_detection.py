@@ -17,7 +17,7 @@ MLFLOW_EXPERIMENT = "/Shared/elexon_anomaly"
 # COMMAND ----------
 
 # Cell 3: Use %pip (not !pip), then restart Python so the next cell sees upgraded packages.
-# Run this cell once, then run the import cell below (or re-run notebook from the import cell).
+# After restart, session state (e.g. CATALOG from cell 2) is cleared. Run the import cell next; the data cell below redefines config so you can continue without re-running cell 2.
 %pip install --upgrade typing_extensions mlflow
 dbutils.library.restartPython()
 
@@ -45,6 +45,11 @@ from datetime import datetime
 
 # COMMAND ----------
 
+# After restartPython() in cell 3, session state is cleared — redefine config so this cell runs without re-running cell 2.
+CATALOG = "elexon_app_for_settlement_acc_catalog"
+SCHEMA_GOLD = "gold"
+MLFLOW_EXPERIMENT = "/Shared/elexon_anomaly"
+
 # Read consumption for training (aggregate per mpan + interval for feature vector).
 # Do not set spark.databricks.mlflow.trackUnityCatalogExperiments.enabled — it is not supported on serverless compute.
 df = spark.table(f"{CATALOG}.{SCHEMA_GOLD}.consumption_half_hourly")
@@ -64,7 +69,7 @@ with mlflow.start_run(run_name="isolation_forest_v1") as run:
     model.fit(X)
     pred = model.predict(X)
     score = model.score_samples(X)
-    mlflow.sklearn.log_model(model, "model")
+    mlflow.sklearn.log_model(model, "model", input_example=X.iloc[:5])
     mlflow.log_param("contamination", 0.01)
     mlflow.log_metric("samples", len(X))
     run_id = run.info.run_id
@@ -73,20 +78,29 @@ with mlflow.start_run(run_name="isolation_forest_v1") as run:
 
 # Register model (workspace registry; use UC name if you have catalog.schema for models)
 model_uri = f"runs:/{run_id}/model"
-model_name = "elexon_anomaly_model"
+# Unity Catalog requires a three-level name: catalog.schema.model (no "default" schema in this catalog)
+model_name = f"{CATALOG}.{SCHEMA_GOLD}.elexon_anomaly_model"
 registered = mlflow.register_model(model_uri, model_name)
 version = registered.version
 
 # COMMAND ----------
 
-# Promote to Production
+# Set "production" alias (Unity Catalog uses aliases, not stages). Required for loading with models:/name@production.
 client = mlflow.tracking.MlflowClient()
-client.transition_model_version_stage(name=model_name, version=version, stage="Production")
+try:
+    client.set_registered_model_alias(model_name, "production", version)
+except Exception:
+    pass  # Alias may already exist or workspace uses stages
+try:
+    client.transition_model_version_stage(name=model_name, version=version, stage="Production")
+except Exception:
+    pass  # Unsupported in Unity Catalog; alias above is used for load
 
 # COMMAND ----------
 
 # Batch inference: score recent consumption and write anomalies
-loaded = mlflow.sklearn.load_model(f"models:/{model_name}/Production")
+# Unity Catalog: load by alias (models:/name@alias), not by stage.
+loaded = mlflow.sklearn.load_model(f"models:/{model_name}@production")
 inference_df = df.withColumn("hour", F.hour("interval_start_ts")).withColumn("day_of_week", F.dayofweek("interval_start_ts"))
 inference_pdf = inference_df.select("mpan_id", "interval_start_ts", "kwh", "hour", "day_of_week").limit(50000).toPandas()
 X_inf = inference_pdf[["kwh", "hour", "day_of_week"]]
