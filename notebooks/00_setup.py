@@ -238,17 +238,34 @@ print("Sample anomalies seeded.")
 
 # COMMAND ----------
 
-# Create roles and grant (run with sufficient privileges)
-# Roles: BSC_SETTLEMENT, BSC_MARKET_MONITORING, BSC_RESEARCH, RECIPIENT_USER
-for role in ["BSC_SETTLEMENT", "BSC_MARKET_MONITORING", "BSC_RESEARCH", "RECIPIENT_USER"]:
-    spark.sql(f"CREATE ROLE IF NOT EXISTS `{CATALOG}`.`{role}`")
-spark.sql(f"GRANT USAGE ON CATALOG {CATALOG} TO `{CATALOG}`.`BSC_SETTLEMENT`")
-spark.sql(f"GRANT USAGE ON SCHEMA {CATALOG}.{SCHEMA_GOLD} TO `{CATALOG}`.`BSC_SETTLEMENT`")
-spark.sql(f"GRANT SELECT ON TABLE {CATALOG}.{SCHEMA_GOLD}.consumption_half_hourly TO `{CATALOG}`.`BSC_SETTLEMENT`")
-spark.sql(f"GRANT SELECT ON TABLE {CATALOG}.{SCHEMA_GOLD}.anomalies TO `{CATALOG}`.`BSC_SETTLEMENT`")
-# Repeat for other roles as needed; RECIPIENT_USER gets only recipient_shared
-spark.sql(f"GRANT USAGE ON SCHEMA {CATALOG}.{SCHEMA_RECIPIENT} TO `{CATALOG}`.`RECIPIENT_USER`")
-print("Roles and grants applied. Add users/groups to roles in Unity Catalog UI as needed.")
+# Unity Catalog uses account-level GROUPS (not roles). CREATE ROLE is not supported.
+# Create these groups in Account Console (Account Settings → Identity & access → Groups) if they do not exist:
+#   BSC_SETTLEMENT, BSC_MARKET_MONITORING, BSC_RESEARCH, RECIPIENT_USER
+# Then grant catalog/schema/table privileges to those groups (run with metastore admin or sufficient privileges).
+
+GROUPS = ["BSC_SETTLEMENT", "BSC_MARKET_MONITORING", "BSC_RESEARCH", "RECIPIENT_USER"]
+
+for group in GROUPS:
+    try:
+        spark.sql(f"GRANT USAGE ON CATALOG {CATALOG} TO `{group}`")
+    except Exception as e:
+        print(f"Grant USAGE ON CATALOG to {group} skipped (group may not exist or no permission): {e}")
+
+for group in ["BSC_SETTLEMENT", "BSC_MARKET_MONITORING", "BSC_RESEARCH"]:
+    try:
+        spark.sql(f"GRANT USAGE ON SCHEMA {CATALOG}.{SCHEMA_GOLD} TO `{group}`")
+        spark.sql(f"GRANT SELECT ON TABLE {CATALOG}.{SCHEMA_GOLD}.consumption_half_hourly TO `{group}`")
+        spark.sql(f"GRANT SELECT ON TABLE {CATALOG}.{SCHEMA_GOLD}.anomalies TO `{group}`")
+    except Exception as e:
+        print(f"Grants for {group} on gold skipped: {e}")
+
+try:
+    spark.sql(f"GRANT USAGE ON SCHEMA {CATALOG}.{SCHEMA_RECIPIENT} TO `RECIPIENT_USER`")
+    spark.sql(f"GRANT SELECT ON SCHEMA {CATALOG}.{SCHEMA_RECIPIENT} TO `RECIPIENT_USER`")
+except Exception as e:
+    print(f"Grants for RECIPIENT_USER skipped: {e}")
+
+print("Grants applied to groups. Ensure BSC_SETTLEMENT, BSC_MARKET_MONITORING, BSC_RESEARCH, RECIPIENT_USER exist in Account Console → Groups.")
 
 # COMMAND ----------
 

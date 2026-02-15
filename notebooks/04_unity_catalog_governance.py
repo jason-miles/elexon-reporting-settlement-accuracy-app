@@ -1,8 +1,8 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # 04_unity_catalog_governance — Roles, purpose-based access, masking, audit
+# MAGIC # 04_unity_catalog_governance — Groups, purpose-based access, masking, audit
 # MAGIC
-# MAGIC **Purpose:** Define Unity Catalog roles (BSC_SETTLEMENT, BSC_MARKET_MONITORING, BSC_RESEARCH, RECIPIENT_USER), purpose-based views, column masking on MPAN, and show audit.
+# MAGIC **Purpose:** Grant to Unity Catalog **groups** (BSC_SETTLEMENT, BSC_MARKET_MONITORING, BSC_RESEARCH, RECIPIENT_USER), purpose-based views, column masking on MPAN, and show audit. Unity Catalog uses account-level groups, not roles.
 # MAGIC
 # MAGIC **Prerequisites:** 00_setup and gold tables exist.
 
@@ -14,19 +14,15 @@ SCHEMA_RECIPIENT = "recipient_shared"
 
 # COMMAND ----------
 
-# Create roles if not exists
-for role in ["BSC_SETTLEMENT", "BSC_MARKET_MONITORING", "BSC_RESEARCH", "RECIPIENT_USER"]:
-    spark.sql(f"CREATE ROLE IF NOT EXISTS `{CATALOG}`.`{role}`")
+# Unity Catalog uses account-level GROUPS (CREATE ROLE is not supported).
+# Create groups BSC_SETTLEMENT, BSC_MARKET_MONITORING, BSC_RESEARCH, RECIPIENT_USER in Account Console → Identity & access → Groups if they do not exist.
+# Grant catalog/schema usage to those groups:
+for group in ["BSC_SETTLEMENT", "BSC_MARKET_MONITORING", "BSC_RESEARCH"]:
+    spark.sql(f"GRANT USAGE ON CATALOG {CATALOG} TO `{group}`")
+    spark.sql(f"GRANT USAGE ON SCHEMA {CATALOG}.{SCHEMA_GOLD} TO `{group}`")
 
-# COMMAND ----------
-
-# Grant catalog/schema usage
-for role in ["BSC_SETTLEMENT", "BSC_MARKET_MONITORING", "BSC_RESEARCH"]:
-    spark.sql(f"GRANT USAGE ON CATALOG {CATALOG} TO `{CATALOG}`.`{role}`")
-    spark.sql(f"GRANT USAGE ON SCHEMA {CATALOG}.{SCHEMA_GOLD} TO `{CATALOG}`.`{role}`")
-
-spark.sql(f"GRANT USAGE ON CATALOG {CATALOG} TO `{CATALOG}`.`RECIPIENT_USER`")
-spark.sql(f"GRANT USAGE ON SCHEMA {CATALOG}.{SCHEMA_RECIPIENT} TO `{CATALOG}`.`RECIPIENT_USER`")
+spark.sql(f"GRANT USAGE ON CATALOG {CATALOG} TO `RECIPIENT_USER`")
+spark.sql(f"GRANT USAGE ON SCHEMA {CATALOG}.{SCHEMA_RECIPIENT} TO `RECIPIENT_USER`")
 
 # COMMAND ----------
 
@@ -46,12 +42,12 @@ spark.sql(f"""
 
 # COMMAND ----------
 
-# Grant SELECT on views to roles (settlement gets v_settlement; others get v_research)
-spark.sql(f"GRANT SELECT ON VIEW {CATALOG}.{SCHEMA_GOLD}.v_settlement_consumption TO `{CATALOG}`.`BSC_SETTLEMENT`")
-spark.sql(f"GRANT SELECT ON VIEW {CATALOG}.{SCHEMA_GOLD}.v_research_consumption TO `{CATALOG}`.`BSC_MARKET_MONITORING`")
-spark.sql(f"GRANT SELECT ON VIEW {CATALOG}.{SCHEMA_GOLD}.v_research_consumption TO `{CATALOG}`.`BSC_RESEARCH`")
-spark.sql(f"GRANT SELECT ON TABLE {CATALOG}.{SCHEMA_GOLD}.anomalies TO `{CATALOG}`.`BSC_SETTLEMENT`")
-spark.sql(f"GRANT SELECT ON TABLE {CATALOG}.{SCHEMA_GOLD}.anomalies TO `{CATALOG}`.`BSC_MARKET_MONITORING`")
+# Grant SELECT on views to groups (settlement gets v_settlement; others get v_research)
+spark.sql(f"GRANT SELECT ON VIEW {CATALOG}.{SCHEMA_GOLD}.v_settlement_consumption TO `BSC_SETTLEMENT`")
+spark.sql(f"GRANT SELECT ON VIEW {CATALOG}.{SCHEMA_GOLD}.v_research_consumption TO `BSC_MARKET_MONITORING`")
+spark.sql(f"GRANT SELECT ON VIEW {CATALOG}.{SCHEMA_GOLD}.v_research_consumption TO `BSC_RESEARCH`")
+spark.sql(f"GRANT SELECT ON TABLE {CATALOG}.{SCHEMA_GOLD}.anomalies TO `BSC_SETTLEMENT`")
+spark.sql(f"GRANT SELECT ON TABLE {CATALOG}.{SCHEMA_GOLD}.anomalies TO `BSC_MARKET_MONITORING`")
 
 # COMMAND ----------
 
