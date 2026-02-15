@@ -7,6 +7,8 @@
 # MAGIC **Prerequisites:** 00_setup run; source data in cloud storage or use synthetic generator.
 # MAGIC
 # MAGIC **Options:** Auto Loader from cloud path, or batch read from CSV/Parquet. This notebook uses batch + optional incremental.
+# MAGIC
+# MAGIC **Note:** Source path uses a Unity Catalog Volume (`/Volumes/.../consumption_data/consumption_in`) because the public DBFS root (`/tmp`) is disabled on many workspaces (e.g. serverless).
 
 # COMMAND ----------
 
@@ -14,13 +16,15 @@ CATALOG = "elexon_app_for_settlement_acc_catalog"
 SCHEMA_BRONZE = "bronze"
 TABLE_RAW = "consumption_raw"
 
-# Source: set to your cloud path or use /tmp/demo for synthetic
-# Example: /Volumes/<catalog>/<schema>/consumption_raw/
-SOURCE_PATH = "/tmp/elexon_demo/consumption_in"
+# Use Unity Catalog Volume (public DBFS root /tmp is disabled on many workspaces, especially serverless)
+# Volume consumption_data must exist in bronze schema; created in next cell if missing
+SOURCE_PATH = f"/Volumes/{CATALOG}/{SCHEMA_BRONZE}/consumption_data/consumption_in"
 
 # COMMAND ----------
 
-# Create source path if using synthetic; otherwise point to real data
+# Ensure Unity Catalog Volume exists (required when /tmp is disabled)
+spark.sql(f"CREATE VOLUME IF NOT EXISTS {CATALOG}.{SCHEMA_BRONZE}.consumption_data")
+# Create the consumption_in directory inside the volume
 dbutils.fs.mkdirs(SOURCE_PATH)
 
 # COMMAND ----------
