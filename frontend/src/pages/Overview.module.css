@@ -1,0 +1,85 @@
+.page {
+  max-width: 900px;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--elexon-gray-900);
+  margin: 0 0 0.35rem 0;
+}
+
+.subtitle {
+  color: var(--elexon-gray-500);
+  margin: 0 0 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.kpiCard {
+  background: var(--elexon-white);
+  padding: 1.25rem;
+  border-radius: 8px;
+  box-shadow: var(--elexon-shadow);
+  border-top: 3px solid var(--elexon-red);
+}
+
+.kpiLabel {
+  font-size: 0.8rem;
+  color: var(--elexon-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.5rem;
+}
+
+.kpiValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--elexon-gray-900);
+}
+
+.kpiValueSmall {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--elexon-gray-700);
+}
+
+.statusSection {
+  margin: 2rem 0;
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.statusOk {
+  background: #d3f9d8;
+  color: var(--elexon-success);
+}
+
+.statusWarn {
+  background: #fff3bf;
+  color: var(--elexon-warning);
+}
+
+.statusText {
+  margin: 0.75rem 0 0 0;
+  color: var(--elexon-gray-700);
+  font-size: 0.95rem;
+}

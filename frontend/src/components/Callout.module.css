@@ -1,0 +1,22 @@
+.callout {
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--elexon-red);
+  background: var(--elexon-white);
+  box-shadow: var(--elexon-shadow);
+  margin: 1rem 0;
+}
+
+.calloutTitle {
+  font-weight: 600;
+  color: var(--elexon-gray-900);
+  margin-bottom: 0.35rem;
+}
+
+.calloutBody {
+  color: var(--elexon-gray-700);
+  font-size: 0.95rem;
+}
+
+.callout.success { border-left-color: var(--elexon-success); }
+.callout.warning { border-left-color: var(--elexon-warning); }

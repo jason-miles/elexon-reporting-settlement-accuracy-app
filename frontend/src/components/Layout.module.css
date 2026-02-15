@@ -1,0 +1,93 @@
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: var(--elexon-white);
+  border-bottom: 3px solid var(--elexon-red);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  box-shadow: var(--elexon-shadow);
+}
+
+.logo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.logoMark {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--elexon-red);
+  letter-spacing: -0.02em;
+}
+
+.appName {
+  font-size: 0.95rem;
+  color: var(--elexon-gray-700);
+  font-weight: 500;
+}
+
+.nav {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.navLink,
+.navLinkActive {
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background 0.15s, color 0.15s;
+}
+
+.navLink {
+  color: var(--elexon-gray-700);
+  text-decoration: none;
+}
+
+.navLink:hover {
+  background: var(--elexon-gray-100);
+  color: var(--elexon-red);
+}
+
+.navLinkActive {
+  background: var(--elexon-red);
+  color: var(--elexon-white);
+  text-decoration: none;
+}
+
+.main {
+  flex: 1;
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.footer {
+  padding: 0.75rem 1.5rem;
+  background: var(--elexon-gray-100);
+  color: var(--elexon-gray-500);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .nav {
+    width: 100%;
+    overflow-x: auto;
+  }
+}

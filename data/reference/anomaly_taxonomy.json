@@ -1,0 +1,26 @@
+[
+  {
+    "id": "theft",
+    "label": "Theft / bypass suspicion",
+    "description": "Unexpected drop or bypass pattern; possible meter tampering.",
+    "severity": "high"
+  },
+  {
+    "id": "meter_malfunction",
+    "label": "Meter malfunction / stuck readings",
+    "description": "Repeated identical or zero variance over multiple periods.",
+    "severity": "medium"
+  },
+  {
+    "id": "network_anomaly",
+    "label": "Network anomaly (local cluster spike)",
+    "description": "Cluster-wide spike or drop affecting multiple MPANs.",
+    "severity": "medium"
+  },
+  {
+    "id": "maintenance",
+    "label": "Maintenance needed (drift / repeated outliers)",
+    "description": "Drift or repeated outliers suggesting calibration or maintenance.",
+    "severity": "low"
+  }
+]

@@ -1,0 +1,110 @@
+.page {
+  max-width: 900px;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 0.35rem 0;
+}
+
+.subtitle {
+  color: var(--elexon-gray-500);
+  margin: 0 0 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+.section {
+  margin: 2rem 0;
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.purposeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.purposeCard {
+  text-align: left;
+  padding: 1rem 1.25rem;
+  border: 2px solid var(--elexon-gray-200);
+  border-radius: 8px;
+  background: var(--elexon-white);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.purposeCard:hover {
+  border-color: var(--elexon-red-light);
+}
+
+.purposeCardActive {
+  border-color: var(--elexon-red);
+  background: #fff5f5;
+}
+
+.purposeLabel {
+  display: block;
+  font-weight: 600;
+  color: var(--elexon-gray-900);
+  margin-bottom: 0.35rem;
+}
+
+.purposeDesc {
+  font-size: 0.85rem;
+  color: var(--elexon-gray-700);
+}
+
+.purposeNote {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--elexon-gray-700);
+}
+
+.tableWrap {
+  overflow-x: auto;
+  background: var(--elexon-white);
+  border-radius: 8px;
+  box-shadow: var(--elexon-shadow);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table th,
+.table td {
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--elexon-gray-200);
+}
+
+.table th {
+  background: var(--elexon-gray-100);
+  font-weight: 600;
+}
+
+code {
+  background: var(--elexon-gray-100);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+.auditSnippet {
+  margin: 1rem 0 0 0;
+  padding: 1rem;
+  background: var(--elexon-gray-900);
+  color: var(--elexon-gray-100);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  overflow-x: auto;
+}

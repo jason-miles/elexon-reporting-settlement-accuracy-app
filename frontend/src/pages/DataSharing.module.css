@@ -1,0 +1,81 @@
+.page {
+  max-width: 1000px;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 0.35rem 0;
+}
+
+.subtitle {
+  color: var(--elexon-gray-500);
+  margin: 0 0 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+@media (max-width: 768px) {
+  .twoCol {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section {
+  background: var(--elexon-white);
+  padding: 1.25rem;
+  border-radius: 8px;
+  box-shadow: var(--elexon-shadow);
+  border-top: 3px solid var(--elexon-red);
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.sectionDesc {
+  font-size: 0.9rem;
+  color: var(--elexon-gray-700);
+  margin: 0 0 1rem 0;
+}
+
+.tableList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tableList li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--elexon-gray-200);
+  font-size: 0.9rem;
+}
+
+.tableList li:last-child {
+  border-bottom: none;
+}
+
+code {
+  background: var(--elexon-gray-100);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+.configSnippet {
+  margin: 0;
+  padding: 1rem;
+  background: var(--elexon-gray-900);
+  color: var(--elexon-gray-100);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  overflow-x: auto;
+}

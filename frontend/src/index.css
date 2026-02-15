@@ -1,0 +1,48 @@
+/* Elexon brand: Tall Poppy #BD2426, white, modern */
+:root {
+  --elexon-red: #BD2426;
+  --elexon-red-dark: #9a1d1f;
+  --elexon-red-light: #e04d4f;
+  --elexon-white: #ffffff;
+  --elexon-off-white: #f8f9fa;
+  --elexon-gray-100: #f1f3f5;
+  --elexon-gray-200: #e9ecef;
+  --elexon-gray-500: #868e96;
+  --elexon-gray-700: #495057;
+  --elexon-gray-900: #212529;
+  --elexon-success: #2f9e44;
+  --elexon-warning: #f59f00;
+  --elexon-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --elexon-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--elexon-off-white);
+  color: var(--elexon-gray-900);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: var(--elexon-red);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
