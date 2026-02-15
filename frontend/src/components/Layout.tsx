@@ -8,6 +8,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     { to: '/streaming-anomalies', label: 'Streaming Anomalies' },
     { to: '/governance-consent', label: 'Governance & Consent' },
     { to: '/data-sharing', label: 'Data Sharing' },
+    { to: '/ask-question', label: 'Ask a Question' },
   ]
   return (
     <div className={styles.wrapper}>

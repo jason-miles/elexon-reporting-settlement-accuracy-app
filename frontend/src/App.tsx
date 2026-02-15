@@ -4,6 +4,7 @@ import Overview from './pages/Overview'
 import StreamingAnomalies from './pages/StreamingAnomalies'
 import GovernanceConsent from './pages/GovernanceConsent'
 import DataSharing from './pages/DataSharing'
+import AskQuestion from './pages/AskQuestion'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/streaming-anomalies" element={<StreamingAnomalies />} />
         <Route path="/governance-consent" element={<GovernanceConsent />} />
         <Route path="/data-sharing" element={<DataSharing />} />
+        <Route path="/ask-question" element={<AskQuestion />} />
       </Routes>
     </Layout>
   )

@@ -31,7 +31,8 @@ Production-quality Databricks App demo for **Elexon** (GB electricity settlement
 2. Run pipeline notebooks **01 → 02 → 03** (bronze → silver → gold).
 3. Run **Unity Catalog** and **ML anomaly** notebooks.
 4. Deploy the **React app** (frontend) as a Databricks App and open the app URL.
-5. Walk through tabs: **Overview → Streaming Anomalies → Governance & Consent → Data Sharing**.
+5. Walk through tabs: **Overview → Streaming Anomalies → Governance & Consent → Data Sharing → Ask a Question**.
+6. (Optional) Create a **Genie space** so users can ask natural language questions — see **docs/GENIE_SETUP.md**.
 
 See **DEMO_GUIDE.md** for the full 7-minute script.
 

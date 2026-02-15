@@ -20,3 +20,4 @@
 
 .callout.success { border-left-color: var(--elexon-success); }
 .callout.warning { border-left-color: var(--elexon-warning); }
+.callout.info { border-left-color: #2563eb; }

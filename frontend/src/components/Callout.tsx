@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 import styles from './Callout.module.css'
 
-type Variant = 'default' | 'success' | 'warning'
+type Variant = 'default' | 'success' | 'warning' | 'info'
 
 export default function Callout({
   title,

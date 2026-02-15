@@ -44,7 +44,7 @@ Use this script to run a tight, “wow”-style demo for Elexon (internal ops + 
 - **Say:** “Access is purpose-based: settlement sees more detail; research sees only anonymised aggregates. MPAN is PII — we store raw in a restricted table and expose only tokenized_mpan to broader roles.”
 - **Show:** Grants table (roles and SELECT) and the **Audit** callout: “Unity Catalog audit logs show who accessed what and when for compliance.”
 
-### Minute 5: Data Sharing tab
+### Minute 5: Data Sharing tab + Ask a Question (Genie)
 
 - Go to **Data Sharing**.
 - **Show:** **Provider view** (full gold tables) vs **Recipient view** (only shared curated tables).
