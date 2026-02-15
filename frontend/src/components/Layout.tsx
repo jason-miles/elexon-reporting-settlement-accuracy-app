@@ -13,7 +13,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     <div className={styles.wrapper}>
       <header className={styles.header}>
         <div className={styles.logo}>
-          <span className={styles.logoMark}>Elexon</span>
+          <img src="/elexon-logo.jpg" alt="Elexon" className={styles.logoImg} />
           <span className={styles.appName}>Consumption Insights & Anomaly Detection</span>
         </div>
         <nav className={styles.nav}>

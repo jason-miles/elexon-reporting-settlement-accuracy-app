@@ -15,6 +15,15 @@ Production-quality Databricks App demo for **Elexon** (GB electricity settlement
 
 ---
 
+## Cursor / IDE
+
+**Open this folder in Cursor:**  
+`/Users/jason.miles/vibe-coding-repos/elexon-reporting-settlement-accuracy-app2`
+
+(File → Open Folder → select the path above. After renaming from `supply-chain-resilience-copilot-app`, ensure Cursor is opened at the new path.)
+
+---
+
 ## Quick start (7-minute demo)
 
 1. Run **`notebooks/00_setup`** in your Databricks workspace (creates catalog, schemas, tables, roles, sample data).
@@ -39,7 +48,7 @@ See **DEMO_GUIDE.md** for the full 7-minute script.
    - Name: `elexon-reporting-settlement-accuracy-app`
    - Do not initialize with README if you already have local content.
 
-2. **From your project root** (the folder that contains this README and the `backend/`, `frontend/`, `data/`, `notebooks/` folders — e.g. `.../supply-chain-resilience-copilot-app`). If you're in an empty folder, there will be no files to add or push.
+2. **From your project root** (the folder that contains this README and the `backend/`, `frontend/`, `data/`, `notebooks/` folders — e.g. `.../elexon-reporting-settlement-accuracy-app2`). If you're in an empty folder, there will be no files to add or push.
 
    ```bash
    cd /path/to/folder/that/has/README-and-backend-frontend-data-notebooks
@@ -81,6 +90,8 @@ After the repo is cloned, run the notebooks in order: **00_setup** → **01** �
 **Repo or 00_setup not updating in Databricks?** Databricks does not auto-sync. You must **Pull** from the repo folder (branch menu → Pull). See [docs/REPO_NOT_UPDATING.md](docs/REPO_NOT_UPDATING.md).
 
 ### Deploy the React app as a Databricks App
+
+See **[docs/INSTALL_DATABRICKS_APP.md](docs/INSTALL_DATABRICKS_APP.md)** for full instructions.
 
 1. **Build the frontend** (on your Mac or in CI):
 

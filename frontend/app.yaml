@@ -1,0 +1,5 @@
+# Databricks App config for Consumption Insights & Anomaly Detection
+# See https://docs.databricks.com/dev-tools/databricks-apps/
+# Command runs after npm install and npm run build during deployment
+run:
+  - npm run start
