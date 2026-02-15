@@ -16,9 +16,23 @@ MLFLOW_EXPERIMENT = "/Shared/elexon_anomaly"
 
 # COMMAND ----------
 
-# Install mlflow and typing_extensions (pydantic_core needs Sentinel from typing_extensions >= 4.0). Run this cell once.
-# If you see "Core Python package version(s) changed", detach and re-attach the notebook, then re-run from the import cell below.
-%pip install "typing_extensions>=4.0" mlflow --quiet
+# Fix "cannot import name 'Sentinel' from 'typing_extensions'": base env often has an old copy.
+# (1) Upgrade in current env; (2) Restart Python so imports use upgraded packages. Then re-run from the import cell below.
+%pip install --upgrade --force-reinstall "typing_extensions>=4.0" mlflow --quiet
+dbutils.library.restartPython()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC **If the import cell below still fails with "cannot import name 'Sentinel'":** the kernel is using the base cluster path. **Uncomment and run the code in the next cell once** to install typing_extensions there, then restart and re-run from the import cell.
+
+# COMMAND ----------
+
+# Run this cell only if Sentinel error persists. Uncomment the 4 lines below, run, then re-run from the import cell.
+# import subprocess, sys
+# base_site = "/databricks/python/lib/python3.10/site-packages"
+# subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade", "--target", base_site, "typing_extensions>=4.0"])
+# dbutils.library.restartPython()
 
 # COMMAND ----------
 
@@ -31,7 +45,10 @@ from datetime import datetime
 # COMMAND ----------
 
 # Read consumption for training (aggregate per mpan + interval for feature vector)
-spark.conf.set("spark.databricks.mlflow.trackUnityCatalogExperiments.enabled", "true")
+try:
+    spark.conf.set("spark.databricks.mlflow.trackUnityCatalogExperiments.enabled", "true")
+except Exception:
+    pass  # Config not available on this runtime (e.g. Spark Connect); MLflow will use workspace experiments
 df = spark.table(f"{CATALOG}.{SCHEMA_GOLD}.consumption_half_hourly")
 # Features: kwh, hour_of_day, day_of_week (from interval_start_ts)
 from pyspark.sql import functions as F
