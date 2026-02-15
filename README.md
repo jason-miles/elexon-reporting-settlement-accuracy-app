@@ -39,9 +39,10 @@ See **DEMO_GUIDE.md** for the full 7-minute script.
    - Name: `elexon-reporting-settlement-accuracy-app`
    - Do not initialize with README if you already have local content.
 
-2. **From your project root** (where this README lives):
+2. **From your project root** (the folder that contains this README and the `backend/`, `frontend/`, `data/`, `notebooks/` folders — e.g. `.../supply-chain-resilience-copilot-app`). If you're in an empty folder, there will be no files to add or push.
 
    ```bash
+   cd /path/to/folder/that/has/README-and-backend-frontend-data-notebooks
    git init
    git remote add origin git@github.com:jason.miles/elexon-reporting-settlement-accuracy-app.git
    git add .
