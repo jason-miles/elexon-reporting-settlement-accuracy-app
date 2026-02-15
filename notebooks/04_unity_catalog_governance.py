@@ -8,7 +8,7 @@
 
 # COMMAND ----------
 
-CATALOG = "elexon_demo"
+CATALOG = "elexon_app_for_settlement_acc_catalog"
 SCHEMA_GOLD = "gold"
 SCHEMA_RECIPIENT = "recipient_shared"
 
@@ -67,4 +67,4 @@ display(spark.sql(f"SHOW GRANTS ON SCHEMA {CATALOG}.{SCHEMA_GOLD}"))
 
 # MAGIC %md
 # MAGIC ## Audit
-# MAGIC Unity Catalog records access in the account audit log. In **Account Console → Audit logs**, filter by resource (e.g. `elexon_demo`) to see who queried what and when. This evidences compliance for purpose-based access and PII handling.
+# MAGIC Unity Catalog records access in the account audit log. In **Account Console → Audit logs**, filter by resource (e.g. `elexon_app_for_settlement_acc_catalog`) to see who queried what and when. This evidences compliance for purpose-based access and PII handling.

@@ -8,7 +8,7 @@
 
 # COMMAND ----------
 
-CATALOG = "elexon_demo"
+CATALOG = "elexon_app_for_settlement_acc_catalog"
 SCHEMA_GOLD = "gold"
 MLFLOW_EXPERIMENT = "/Shared/elexon_anomaly"
 

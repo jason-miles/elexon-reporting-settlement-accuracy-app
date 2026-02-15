@@ -102,8 +102,8 @@ export const mockGrants = [
 ]
 
 export const mockRecipientTables = [
-  { tableName: 'gold_consumption_curated', tableCatalog: 'elexon_demo', tableSchema: 'recipient_shared' },
-  { tableName: 'gold_anomalies', tableCatalog: 'elexon_demo', tableSchema: 'recipient_shared' },
+  { tableName: 'gold_consumption_curated', tableCatalog: 'elexon_app_for_settlement_acc_catalog', tableSchema: 'recipient_shared' },
+  { tableName: 'gold_anomalies', tableCatalog: 'elexon_app_for_settlement_acc_catalog', tableSchema: 'recipient_shared' },
 ]
 
 export const mockProviderTables = [

@@ -53,8 +53,8 @@ export default function DataSharing() {
         <pre className={styles.configSnippet}>
 {`-- Provider: create share and add tables
 CREATE SHARE IF NOT EXISTS elexon_consumption_share;
-ALTER SHARE elexon_consumption_share ADD TABLE elexon_demo.gold.gold_consumption_curated;
-ALTER SHARE elexon_consumption_share ADD TABLE elexon_demo.gold.gold_anomalies;
+ALTER SHARE elexon_consumption_share ADD TABLE elexon_app_for_settlement_acc_catalog.gold.gold_consumption_curated;
+ALTER SHARE elexon_consumption_share ADD TABLE elexon_app_for_settlement_acc_catalog.gold.gold_anomalies;
 
 -- Recipient: create catalog from share (using Provider's share credentials)
 CREATE CATALOG IF NOT EXISTS elexon_shared

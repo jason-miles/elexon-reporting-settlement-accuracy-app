@@ -6,7 +6,7 @@
 -- Gold: consumption_half_hourly, consumption_daily_agg, features, anomalies
 
 -- Gold consumption (example)
-CREATE TABLE IF NOT EXISTS elexon_demo.gold.consumption_half_hourly (
+CREATE TABLE IF NOT EXISTS elexon_app_for_settlement_acc_catalog.gold.consumption_half_hourly (
   mpan_id STRING,
   tokenized_mpan STRING,
   interval_start_ts TIMESTAMP,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS elexon_demo.gold.consumption_half_hourly (
 TBLPROPERTIES ('delta.autoOptimize.optimizeWrite' = 'true', 'delta.autoOptimize.autoCompact' = 'true');
 
 -- Gold anomalies
-CREATE TABLE IF NOT EXISTS elexon_demo.gold.anomalies (
+CREATE TABLE IF NOT EXISTS elexon_app_for_settlement_acc_catalog.gold.anomalies (
   anomaly_id STRING,
   mpan_id STRING,
   interval_start_ts TIMESTAMP,

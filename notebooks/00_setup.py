@@ -9,6 +9,8 @@
 # MAGIC **Region:** UK South (no hard dependency).
 # MAGIC
 # MAGIC **Run:** Execute all cells in order.
+# MAGIC
+# MAGIC **Important:** The **`CATALOG`** name in the Config cell must match the catalog name in your workspace (Catalog Explorer) **exactly**. For this workspace use `elexon_app_for_settlement_acc_catalog`. A mismatch causes "Catalog was not found" and failed schema creation.
 
 # COMMAND ----------
 
@@ -17,7 +19,7 @@
 # MAGIC
 # MAGIC If the Catalog **+** menu only shows "Add data", "Create volume", etc. (no "Create catalog"), your account may restrict catalog creation to admins. **Use a catalog you already have.**
 # MAGIC
-# MAGIC 1. In the **Config** cell below, set **`CATALOG`** to your existing catalog name (e.g. **`elexon_app_for_settle`** — you should see it under "My organization" in Catalog).
+# MAGIC 1. In the **Config** cell below, set **`CATALOG`** to your existing catalog name (e.g. **`elexon_app_for_settlement_acc_catalog`** — you should see it under "My organization" in Catalog).
 # MAGIC 2. Set **`CREATE_CATALOG_IN_UI = True`** so the notebook skips creating a catalog and only creates schemas and tables inside that catalog.
 # MAGIC 3. **Run all.** Everything will be created under your existing catalog.
 # MAGIC 4. When you run notebooks **01** through **06**, set **`CATALOG`** to the same name at the top of each notebook.
@@ -28,10 +30,10 @@
 # MAGIC (Only if you are trying to create a *new* catalog.) Unity Catalog needs a storage location. Do **one** of the following:
 # MAGIC
 # MAGIC ### Option A — Use an existing catalog (recommended if you don't see "Create catalog")
-# MAGIC Set **`CATALOG`** to an existing catalog (e.g. `elexon_app_for_settle`) and **`CREATE_CATALOG_IN_UI = True`** in the Config cell. Then re-run.
+# MAGIC Set **`CATALOG`** to an existing catalog (e.g. `elexon_app_for_settlement_acc_catalog`) and **`CREATE_CATALOG_IN_UI = True`** in the Config cell. Then re-run.
 # MAGIC
 # MAGIC ### Option B — Create catalog in the UI (if your admin enabled it)
-# MAGIC Some workspaces have **Create catalog** in the **Account** console (account-level), not in the workspace Catalog pane. Ask your metastore/account admin to create a catalog named `elexon_demo` with Default Storage, then set **`CREATE_CATALOG_IN_UI = True`** and re-run.
+# MAGIC Some workspaces have **Create catalog** in the **Account** console (account-level), not in the workspace Catalog pane. Ask your metastore/account admin to create a catalog (e.g. `elexon_app_for_settlement_acc_catalog`) with Default Storage, then set **`CREATE_CATALOG_IN_UI = True`** and re-run.
 # MAGIC
 # MAGIC ### Option C — Use a managed location path
 # MAGIC Set **`MANAGED_LOCATION`** in the Config cell to your cloud path (e.g. `abfss://...` or `s3://...`) and re-run.
@@ -39,8 +41,8 @@
 # COMMAND ----------
 
 # Config: catalog and schemas (medallion + recipient)
-# Use an existing catalog if you don't have "Create catalog" in the UI (e.g. elexon_app_for_settle):
-CATALOG = "elexon_app_for_settle"  # or "elexon_demo" if you created that catalog
+# Use your workspace catalog (must match the name in Catalog Explorer exactly, e.g. elexon_app_for_settlement_acc_catalog):
+CATALOG = "elexon_app_for_settlement_acc_catalog"
 SCHEMA_BRONZE = "bronze"
 SCHEMA_SILVER = "silver"
 SCHEMA_GOLD = "gold"
@@ -49,7 +51,7 @@ SCHEMA_RECIPIENT = "recipient_shared"
 # Skip creating the catalog (use existing): set True when using a catalog that already exists
 CREATE_CATALOG_IN_UI = True
 # Only if creating a new catalog and you need to specify storage path:
-MANAGED_LOCATION = None  # e.g. "abfss://container@storage.dfs.core.windows.net/elexon_demo" or "s3://bucket/elexon_demo"
+MANAGED_LOCATION = None  # e.g. "abfss://container@storage.dfs.core.windows.net/elexon_app_for_settlement_acc_catalog" or "s3://bucket/..."
 
 # COMMAND ----------
 
@@ -94,7 +96,7 @@ def ensure_catalog_and_schemas():
                     try:
                         spark.sql(f"CREATE CATALOG IF NOT EXISTS {CATALOG}")
                     except Exception as e2:
-                        print("ERROR: Could not create catalog. Set MANAGED_LOCATION to your cloud path (e.g. abfss://container@store.dfs.core.windows.net/elexon_demo), or set CATALOG to an existing catalog name. Run: spark.sql('SHOW CATALOGS').show() to list catalogs.")
+                        print("ERROR: Could not create catalog. Set MANAGED_LOCATION to your cloud path, or set CATALOG to an existing catalog name (must match Catalog Explorer exactly, e.g. elexon_app_for_settlement_acc_catalog). Run: spark.sql('SHOW CATALOGS').show() to list catalogs.")
                         raise
                 create_schemas()
             else:

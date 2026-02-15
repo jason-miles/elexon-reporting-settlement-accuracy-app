@@ -8,7 +8,7 @@
 
 # COMMAND ----------
 
-CATALOG = "elexon_demo"
+CATALOG = "elexon_app_for_settlement_acc_catalog"
 SCHEMA_BRONZE = "bronze"
 SCHEMA_SILVER = "silver"
 TABLE_RAW = "consumption_raw"

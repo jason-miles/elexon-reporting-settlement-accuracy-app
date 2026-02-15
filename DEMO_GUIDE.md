@@ -9,7 +9,7 @@ Use this script to run a tight, “wow”-style demo for Elexon (internal ops + 
 1. **Workspace:** Use https://fevm-elexon-app-for-settlement-acc.cloud.databricks.com (or your UK South workspace).
 2. **Run once:** Open **Repos** and sync/clone `elexon-reporting-settlement-accuracy-app` (or upload the notebooks).
 3. **Run in order:**
-   - **00_setup** — creates catalog `elexon_demo`, schemas (bronze/silver/gold/recipient_shared), tables, roles, synthetic data.
+   - **00_setup** — uses catalog `elexon_app_for_settlement_acc_catalog`, creates schemas (bronze/silver/gold/recipient_shared), tables, roles, synthetic data.
    - **01_ingest_bronze** — (optional) ingest more raw data.
    - **02_transform_silver** — clean, dedupe, 48h watermark.
    - **03_curate_gold** — gold consumption + curated tables.
@@ -53,7 +53,7 @@ Use this script to run a tight, “wow”-style demo for Elexon (internal ops + 
 ### Minute 6: Back to Databricks (optional)
 
 - In Databricks, briefly show:
-  - **Catalog Explorer:** `elexon_demo` → bronze / silver / gold / recipient_shared.
+  - **Catalog Explorer:** `elexon_app_for_settlement_acc_catalog` → bronze / silver / gold / recipient_shared.
   - **MLflow:** experiment and model in **Production**.
   - **Delta Sharing:** share and added tables (06_delta_sharing output).
 

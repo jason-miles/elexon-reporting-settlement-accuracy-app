@@ -86,10 +86,10 @@ export default function GovernanceConsent() {
           available) to demonstrate who accessed what and when.
         </Callout>
         <pre className={styles.auditSnippet}>
-{`-- Example: list recent access to elexon_demo (adapt to your workspace)
+{`-- Example: list recent access to elexon_app_for_settlement_acc_catalog (adapt to your workspace)
 SELECT event_time, user_identity, request_params
 FROM system.access.audit
-WHERE request_params.full_name_arg LIKE '%elexon_demo%'
+WHERE request_params.full_name_arg LIKE '%elexon_app_for_settlement_acc_catalog%'
 ORDER BY event_time DESC
 LIMIT 100;`}
         </pre>
