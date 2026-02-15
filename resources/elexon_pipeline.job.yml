@@ -8,7 +8,7 @@ resources:
       tasks:
         - task_key: setup
           notebook_task:
-            notebook_path: notebooks/00_setup.py
+            notebook_path: ../notebooks/00_setup.py
           job_cluster_key: default
       job_clusters:
         - job_cluster_key: default
@@ -24,41 +24,41 @@ resources:
       tasks:
         - task_key: setup
           notebook_task:
-            notebook_path: notebooks/00_setup.py
+            notebook_path: ../notebooks/00_setup.py
           job_cluster_key: default
         - task_key: ingest_bronze
           notebook_task:
-            notebook_path: notebooks/01_ingest_bronze.py
+            notebook_path: ../notebooks/01_ingest_bronze.py
           job_cluster_key: default
           depends_on:
             - task_key: setup
         - task_key: transform_silver
           notebook_task:
-            notebook_path: notebooks/02_transform_silver.py
+            notebook_path: ../notebooks/02_transform_silver.py
           job_cluster_key: default
           depends_on:
             - task_key: ingest_bronze
         - task_key: curate_gold
           notebook_task:
-            notebook_path: notebooks/03_curate_gold.py
+            notebook_path: ../notebooks/03_curate_gold.py
           job_cluster_key: default
           depends_on:
             - task_key: transform_silver
         - task_key: unity_catalog
           notebook_task:
-            notebook_path: notebooks/04_unity_catalog_governance.py
+            notebook_path: ../notebooks/04_unity_catalog_governance.py
           job_cluster_key: default
           depends_on:
             - task_key: curate_gold
         - task_key: ml_anomaly
           notebook_task:
-            notebook_path: notebooks/05_ml_anomaly_detection.py
+            notebook_path: ../notebooks/05_ml_anomaly_detection.py
           job_cluster_key: default
           depends_on:
             - task_key: unity_catalog
         - task_key: delta_sharing
           notebook_task:
-            notebook_path: notebooks/06_delta_sharing.py
+            notebook_path: ../notebooks/06_delta_sharing.py
           job_cluster_key: default
           depends_on:
             - task_key: ml_anomaly
