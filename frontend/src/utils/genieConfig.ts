@@ -6,4 +6,4 @@
  */
 export const GENIE_SPACE_URL =
   import.meta.env.VITE_GENIE_SPACE_URL ||
-  'https://fevm-elexon-app-for-settlement-acc.cloud.databricks.com/?o=7474654808133980#workspace/Users/jason.miles@databricks.com/Genie%20Room%3A%20Elexon%20Consumption%20%26%20Anomaly%20Detection'
+  'https://fevm-elexon-app-for-settlement-acc.cloud.databricks.com/genie/rooms/01f10ab5287a1287a32c2c4e16098c0a?o=7474654808133980'
