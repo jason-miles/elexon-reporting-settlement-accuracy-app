@@ -3,10 +3,6 @@ import Callout from '../components/Callout'
 import { GENIE_SPACE_URL } from '../utils/genieConfig'
 
 export default function AskQuestion() {
-  const openGenie = () => {
-    window.open(GENIE_SPACE_URL, '_blank', 'noopener,noreferrer')
-  }
-
   return (
     <div className={styles.page}>
       <h1>Ask a Question of Your Data</h1>
@@ -28,9 +24,15 @@ export default function AskQuestion() {
       </Callout>
 
       <div className={styles.actions}>
-        <button className={styles.primaryButton} onClick={openGenie}>
+        <a
+          href={GENIE_SPACE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.primaryButton}
+          style={{ textDecoration: 'none' }}
+        >
           Open Genie in Databricks →
-        </button>
+        </a>
       </div>
 
       <Callout variant="warning" title="First-time setup">
