@@ -113,3 +113,104 @@ export const mockProviderTables = [
   { tableName: 'gold_consumption_curated', tableSchema: 'gold' },
   { tableName: 'gold_anomalies', tableSchema: 'gold' },
 ]
+
+/* ---------- Reports & Actions ---------- */
+
+export type ReportStatus = 'open' | 'investigating' | 'escalated' | 'resolved'
+export type ReportPriority = 'high' | 'medium' | 'low'
+
+export interface ReportAction {
+  ts: string
+  actor: string
+  action: string
+  note?: string
+}
+
+export interface CaseReport {
+  report_id: string
+  title: string
+  category: string
+  linked_anomaly?: string
+  mpan_id: string
+  priority: ReportPriority
+  status: ReportStatus
+  assignee: string
+  created_at: string
+  updated_at: string
+  description: string
+  actions: ReportAction[]
+}
+
+export const reportCategories = [
+  'Theft / bypass',
+  'Meter malfunction',
+  'Network anomaly',
+  'Maintenance',
+  'Data quality',
+  'Other',
+]
+
+export const assignees = [
+  'Unassigned',
+  'Ops — Settlement',
+  'Ops — Field',
+  'Market Monitoring',
+  'Data Engineering',
+]
+
+export const mockReports: CaseReport[] = [
+  {
+    report_id: 'RPT-1042',
+    title: 'Zero consumption on active MPAN — suspected stuck meter',
+    category: 'Meter malfunction',
+    linked_anomaly: 'a1',
+    mpan_id: '***4567',
+    priority: 'high',
+    status: 'investigating',
+    assignee: 'Ops — Field',
+    created_at: '2024-02-15T09:10:00Z',
+    updated_at: '2024-02-15T11:20:00Z',
+    description:
+      'Meter reporting 0.00 kWh across consecutive half-hourly intervals despite site being active. Anomaly score 92%.',
+    actions: [
+      { ts: '2024-02-15T09:10:00Z', actor: 'System', action: 'Report created', note: 'Auto-raised from anomaly a1' },
+      { ts: '2024-02-15T09:42:00Z', actor: 'Ops — Settlement', action: 'Acknowledged' },
+      { ts: '2024-02-15T11:20:00Z', actor: 'Ops — Field', action: 'Assigned', note: 'Field visit scheduled' },
+    ],
+  },
+  {
+    report_id: 'RPT-1041',
+    title: 'Consumption spike inconsistent with profile — possible bypass',
+    category: 'Theft / bypass',
+    linked_anomaly: 'a2',
+    mpan_id: '***8821',
+    priority: 'high',
+    status: 'escalated',
+    assignee: 'Market Monitoring',
+    created_at: '2024-02-15T07:15:00Z',
+    updated_at: '2024-02-15T08:05:00Z',
+    description: 'Overnight consumption pattern inconsistent with historical profile. Escalated for investigation.',
+    actions: [
+      { ts: '2024-02-15T07:15:00Z', actor: 'System', action: 'Report created', note: 'Auto-raised from anomaly a2' },
+      { ts: '2024-02-15T08:05:00Z', actor: 'Market Monitoring', action: 'Escalated', note: 'Referred to revenue protection' },
+    ],
+  },
+  {
+    report_id: 'RPT-1039',
+    title: 'Intermittent network gaps in half-hourly feed',
+    category: 'Network anomaly',
+    linked_anomaly: 'a3',
+    mpan_id: '***1203',
+    priority: 'medium',
+    status: 'resolved',
+    assignee: 'Data Engineering',
+    created_at: '2024-02-14T05:40:00Z',
+    updated_at: '2024-02-14T14:00:00Z',
+    description: 'Gaps in feed traced to upstream comms outage. Backfilled within 48h watermark window.',
+    actions: [
+      { ts: '2024-02-14T05:40:00Z', actor: 'System', action: 'Report created' },
+      { ts: '2024-02-14T09:12:00Z', actor: 'Data Engineering', action: 'Acknowledged' },
+      { ts: '2024-02-14T14:00:00Z', actor: 'Data Engineering', action: 'Resolved', note: 'Late data backfilled; readings reconciled' },
+    ],
+  },
+]

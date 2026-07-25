@@ -3,6 +3,7 @@ import Layout from './components/Layout'
 import Overview from './pages/Overview'
 import BusinessOverview from './pages/BusinessOverview'
 import StreamingAnomalies from './pages/StreamingAnomalies'
+import ReportsActions from './pages/ReportsActions'
 import GovernanceConsent from './pages/GovernanceConsent'
 import DataSharing from './pages/DataSharing'
 import AskQuestion from './pages/AskQuestion'
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Overview />} />
         <Route path="/business-overview" element={<BusinessOverview />} />
         <Route path="/streaming-anomalies" element={<StreamingAnomalies />} />
+        <Route path="/reports-actions" element={<ReportsActions />} />
         <Route path="/governance-consent" element={<GovernanceConsent />} />
         <Route path="/data-sharing" element={<DataSharing />} />
         <Route path="/ask-question" element={<AskQuestion />} />

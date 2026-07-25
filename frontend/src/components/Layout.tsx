@@ -8,6 +8,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     { to: '/', label: 'Overview', end: true },
     { to: '/business-overview', label: 'Business Overview' },
     { to: '/streaming-anomalies', label: 'Streaming Anomalies' },
+    { to: '/reports-actions', label: 'Reports & Actions' },
     { to: '/governance-consent', label: 'Governance & Consent' },
     { to: '/data-sharing', label: 'Data Sharing' },
     { to: '/ask-question', label: 'Ask a Question' },
