@@ -4,3 +4,10 @@ Project root: elexon-reporting-settlement-accuracy-app2
 Local path: /Users/jason.miles/vibe-coding-repos/elexon-reporting-settlement-accuracy-app2
 
 When editing docs or scripts that reference the project path, use the path above.
+
+## Databricks AI Dev Kit
+
+This project uses [Databricks AI Dev Kit](https://github.com/databricks-solutions/ai-dev-kit) standards. For new Databricks projects, install with:
+`bash <(curl -sL https://raw.githubusercontent.com/databricks-solutions/ai-dev-kit/main/install.sh) --tools cursor`
+
+Use skills in `.cursor/skills/` and MCP tools in `.cursor/mcp.json` for Databricks patterns.

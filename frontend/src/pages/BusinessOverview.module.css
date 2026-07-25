@@ -1,0 +1,139 @@
+.page {
+  max-width: 1000px;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--elexon-red);
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--elexon-gray-900);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  color: var(--elexon-gray-600);
+  margin: 0;
+  font-size: 1.02rem;
+  max-width: 60ch;
+}
+
+.section {
+  margin: 2rem 0;
+}
+
+.sectionTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: var(--elexon-gray-900);
+}
+
+/* Capabilities */
+.capGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.capCard {
+  display: flex;
+  gap: 0.9rem;
+  background: var(--elexon-white);
+  padding: 1.15rem 1.25rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--elexon-gray-200);
+  box-shadow: var(--elexon-shadow-sm);
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+
+.capCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--elexon-shadow-md);
+  border-color: var(--elexon-red-light);
+}
+
+.capIcon {
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--elexon-red-50);
+}
+
+.capTitle {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--elexon-gray-900);
+  margin: 0 0 0.3rem 0;
+}
+
+.capDesc {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--elexon-gray-600);
+  line-height: 1.5;
+}
+
+/* Use cases */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  position: relative;
+  background: var(--elexon-white);
+  padding: 1.35rem 1.25rem 1.25rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--elexon-gray-200);
+  box-shadow: var(--elexon-shadow-sm);
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+}
+
+.settlement::before { background: var(--elexon-red); }
+.market::before { background: var(--elexon-info); }
+.research::before { background: var(--elexon-success); }
+
+.cardTag {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--elexon-gray-900);
+  margin-bottom: 0.5rem;
+}
+
+.cardText {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--elexon-gray-600);
+  line-height: 1.5;
+}

@@ -1,85 +1,235 @@
 .page {
-  max-width: 900px;
+  max-width: 1040px;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  margin-bottom: 1.75rem;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--elexon-red);
+  margin-bottom: 0.5rem;
 }
 
 .title {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--elexon-gray-900);
-  margin: 0 0 0.35rem 0;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
-  color: var(--elexon-gray-500);
-  margin: 0 0 1.5rem 0;
-  font-size: 0.95rem;
+  color: var(--elexon-gray-600);
+  margin: 0;
+  font-size: 1.02rem;
+  max-width: 62ch;
+  line-height: 1.6;
 }
 
+/* ---------- KPIs ---------- */
 .kpiGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
-  margin: 1.5rem 0;
+  margin: 1.75rem 0;
 }
 
 .kpiCard {
   background: var(--elexon-white);
   padding: 1.25rem;
-  border-radius: 8px;
+  border-radius: var(--radius);
+  border: 1px solid var(--elexon-gray-200);
   box-shadow: var(--elexon-shadow);
-  border-top: 3px solid var(--elexon-red);
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
 
-.kpiLabel {
-  font-size: 0.8rem;
-  color: var(--elexon-gray-500);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  margin-bottom: 0.5rem;
+.kpiCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--elexon-shadow-md);
+}
+
+.kpiTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.kpiIcon {
+  font-size: 1.15rem;
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: var(--radius-sm);
+  background: var(--elexon-red-50);
+}
+
+.kpiTrend {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--elexon-success);
+  background: var(--elexon-success-bg);
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
 }
 
 .kpiValue {
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: 700;
   color: var(--elexon-gray-900);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.kpiUnit {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--elexon-gray-500);
 }
 
 .kpiValueSmall {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--elexon-gray-700);
+  line-height: 1.3;
+  padding: 0.2rem 0;
 }
 
-.statusSection {
-  margin: 2rem 0;
+.kpiLabel {
+  font-size: 0.85rem;
+  color: var(--elexon-gray-600);
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.kpiPeriod {
+  color: var(--elexon-gray-400);
+  font-weight: 400;
+}
+
+/* ---------- Status panel ---------- */
+.statusPanel {
+  background: var(--elexon-white);
+  border: 1px solid var(--elexon-gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elexon-shadow);
+  padding: 1.5rem;
+  margin: 1.75rem 0;
+}
+
+.statusHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .sectionTitle {
   font-size: 1.1rem;
   font-weight: 600;
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 0.35rem 0;
+  color: var(--elexon-gray-900);
+}
+
+.statusText {
+  margin: 0;
+  color: var(--elexon-gray-600);
+  font-size: 0.92rem;
+  max-width: 60ch;
+}
+
+.statusText code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--elexon-gray-100);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
 }
 
 .statusBadge {
-  display: inline-block;
-  padding: 0.35rem 0.75rem;
-  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
   font-size: 0.85rem;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .statusOk {
-  background: #d3f9d8;
+  background: var(--elexon-success-bg);
   color: var(--elexon-success);
 }
 
 .statusWarn {
-  background: #fff3bf;
+  background: var(--elexon-warning-bg);
   color: var(--elexon-warning);
 }
 
-.statusText {
-  margin: 0.75rem 0 0 0;
+.badgeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ---------- Pipeline ---------- */
+.pipeline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.35rem;
+  padding-top: 1.35rem;
+  border-top: 1px dashed var(--elexon-gray-200);
+}
+
+.pipeStageWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pipeStage {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--elexon-gray-50);
+  border: 1px solid var(--elexon-gray-200);
+  font-size: 0.82rem;
+  font-weight: 500;
   color: var(--elexon-gray-700);
-  font-size: 0.95rem;
+}
+
+.pipeCheck {
+  display: grid;
+  place-items: center;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 50%;
+  background: var(--elexon-success);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.pipeArrow {
+  color: var(--elexon-gray-400);
+  font-weight: 600;
+}
+
+@media (max-width: 560px) {
+  .title { font-size: 1.6rem; }
 }

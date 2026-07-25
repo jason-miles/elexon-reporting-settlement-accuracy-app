@@ -13,52 +13,78 @@ export default function Overview() {
   }, [])
 
   const formatNum = (n: number) => n.toLocaleString()
-  const formatKwh = (n: number) => `${(n / 1_000_000).toFixed(1)}M kWh`
+  const formatKwh = (n: number) => `${(n / 1_000_000).toFixed(1)}M`
   const latest = kpi.latest_reading_ts ? new Date(kpi.latest_reading_ts).toLocaleString() : '—'
+
+  const kpis = [
+    { label: 'Distinct MPANs', period: 'last 7 days', value: formatNum(kpi.total_mpans), icon: '⚡', trend: '+2.4%' },
+    { label: 'Total consumption', period: 'last 7 days', value: formatKwh(kpi.total_kwh), unit: 'kWh', icon: '🔌', trend: '+1.1%' },
+    { label: 'Half-hourly readings', period: 'last 7 days', value: formatNum(kpi.total_readings), icon: '📈', trend: '+0.8%' },
+    { label: 'Latest reading', period: 'ingested', value: latest, small: true, icon: '🕒' },
+  ]
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.title}>Overview</h1>
-      <p className={styles.subtitle}>
-        High-level KPIs and live status for half-hourly consumption and anomaly detection.
-      </p>
-
-      <Callout title="What this app does" variant="success">
-        Consumption Insights & Anomaly Detection gives Elexon internal ops and industry signatories
-        (suppliers/generators) a single view of half-hourly consumption, real-time anomaly alerts
-        (theft, meter malfunction, network issues, maintenance), and governed access to data
-        via Unity Catalog and Delta Sharing.
-      </Callout>
+      <header className={styles.hero}>
+        <span className={styles.eyebrow}>Consumption Insights &amp; Anomaly Detection</span>
+        <h1 className={styles.title}>Overview</h1>
+        <p className={styles.subtitle}>
+          A single, governed view of GB half-hourly consumption — with real-time anomaly detection,
+          purpose-based access, and secure data sharing for Elexon and industry signatories.
+        </p>
+      </header>
 
       <div className={styles.kpiGrid}>
-        <div className={styles.kpiCard}>
-          <div className={styles.kpiLabel}>Distinct MPANs (7d)</div>
-          <div className={styles.kpiValue}>{formatNum(kpi.total_mpans)}</div>
+        {kpis.map((k) => (
+          <div key={k.label} className={styles.kpiCard}>
+            <div className={styles.kpiTop}>
+              <span className={styles.kpiIcon} aria-hidden="true">{k.icon}</span>
+              {k.trend && <span className={styles.kpiTrend}>{k.trend}</span>}
+            </div>
+            <div className={k.small ? styles.kpiValueSmall : styles.kpiValue}>
+              {k.value}
+              {k.unit && <span className={styles.kpiUnit}> {k.unit}</span>}
+            </div>
+            <div className={styles.kpiLabel}>
+              {k.label} <span className={styles.kpiPeriod}>· {k.period}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className={styles.statusPanel}>
+        <div className={styles.statusHead}>
+          <div>
+            <h2 className={styles.sectionTitle}>Pipeline status</h2>
+            <p className={styles.statusText}>
+              Ingestion and anomaly detection are running. Late-arriving data is supported with up
+              to a 48-hour watermark and deduplication by <code>(mpan_id, interval_start_ts)</code>.
+            </p>
+          </div>
+          <div className={`${styles.statusBadge} ${liveStatus === 'operational' ? styles.statusOk : styles.statusWarn}`}>
+            <span className={styles.badgeDot} />
+            {liveStatus === 'operational' ? 'Operational' : 'Degraded'}
+          </div>
         </div>
-        <div className={styles.kpiCard}>
-          <div className={styles.kpiLabel}>Total consumption (7d)</div>
-          <div className={styles.kpiValue}>{formatKwh(kpi.total_kwh)}</div>
-        </div>
-        <div className={styles.kpiCard}>
-          <div className={styles.kpiLabel}>Half-hourly readings (7d)</div>
-          <div className={styles.kpiValue}>{formatNum(kpi.total_readings)}</div>
-        </div>
-        <div className={styles.kpiCard}>
-          <div className={styles.kpiLabel}>Latest reading</div>
-          <div className={styles.kpiValueSmall}>{latest}</div>
+        <div className={styles.pipeline}>
+          {['Bronze · raw', 'Silver · cleaned', 'Gold · curated', 'ML · anomalies'].map((stage, i, arr) => (
+            <div key={stage} className={styles.pipeStageWrap}>
+              <div className={styles.pipeStage}>
+                <span className={styles.pipeCheck}>✓</span>
+                {stage}
+              </div>
+              {i < arr.length - 1 && <span className={styles.pipeArrow}>→</span>}
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className={styles.statusSection}>
-        <h2 className={styles.sectionTitle}>Live status</h2>
-        <div className={`${styles.statusBadge} ${liveStatus === 'operational' ? styles.statusOk : styles.statusWarn}`}>
-          {liveStatus === 'operational' ? 'Operational' : 'Degraded'}
-        </div>
-        <p className={styles.statusText}>
-          Ingestion and anomaly detection pipelines are running. Data is available with up to 48h
-          watermark for late-arriving data.
-        </p>
-      </div>
+      <Callout title="What this app does" variant="success">
+        Consumption Insights &amp; Anomaly Detection gives Elexon internal ops and industry signatories
+        (suppliers/generators) one place to see half-hourly consumption, real-time anomaly alerts
+        (theft, meter malfunction, network issues, maintenance), and governed access to data via
+        Unity Catalog and Delta Sharing.
+      </Callout>
 
       <Callout title="Demo context">
         This demo uses synthetic MPAN-like identifiers and sample data. In production, ~40M MPANs

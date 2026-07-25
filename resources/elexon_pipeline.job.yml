@@ -1,4 +1,5 @@
 # Elexon medallion pipeline - Part of Databricks Asset Bundles (DABS)
+# Catalog is passed via bundle variable catalog_name; override with -v catalog_name=your_catalog
 resources:
   jobs:
     elexon_setup_only:
@@ -9,6 +10,8 @@ resources:
         - task_key: setup
           notebook_task:
             notebook_path: ../notebooks/00_setup.py
+            base_parameters:
+              catalog: ${var.catalog_name}
 
     elexon_full_pipeline:
       name: "[Elexon] Full pipeline (00→06)"
@@ -18,33 +21,47 @@ resources:
         - task_key: setup
           notebook_task:
             notebook_path: ../notebooks/00_setup.py
+            base_parameters:
+              catalog: ${var.catalog_name}
         - task_key: ingest_bronze
           notebook_task:
             notebook_path: ../notebooks/01_ingest_bronze.py
+            base_parameters:
+              catalog: ${var.catalog_name}
           depends_on:
             - task_key: setup
         - task_key: transform_silver
           notebook_task:
             notebook_path: ../notebooks/02_transform_silver.py
+            base_parameters:
+              catalog: ${var.catalog_name}
           depends_on:
             - task_key: ingest_bronze
         - task_key: curate_gold
           notebook_task:
             notebook_path: ../notebooks/03_curate_gold.py
+            base_parameters:
+              catalog: ${var.catalog_name}
           depends_on:
             - task_key: transform_silver
         - task_key: unity_catalog
           notebook_task:
             notebook_path: ../notebooks/04_unity_catalog_governance.py
+            base_parameters:
+              catalog: ${var.catalog_name}
           depends_on:
             - task_key: curate_gold
         - task_key: ml_anomaly
           notebook_task:
             notebook_path: ../notebooks/05_ml_anomaly_detection.py
+            base_parameters:
+              catalog: ${var.catalog_name}
           depends_on:
             - task_key: unity_catalog
         - task_key: delta_sharing
           notebook_task:
             notebook_path: ../notebooks/06_delta_sharing.py
+            base_parameters:
+              catalog: ${var.catalog_name}
           depends_on:
             - task_key: ml_anomaly

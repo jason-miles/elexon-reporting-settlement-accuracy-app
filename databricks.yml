@@ -1,14 +1,17 @@
 # Databricks Asset Bundles (DABS) - Elexon Consumption Insights
-# Deploy from DATABRICKS workspace (not your local IDE):
-#   1. Open Repos → elexon-reporting-settlement-accuracy-app → Pull
-#   2. Open this file (databricks.yml) IN DATABRICKS
-#   3. In the Databricks editor, click the Deployments icon (rocket) in the top bar
-#   4. Select target → Deploy → Run jobs from Bundle resources pane
-# Or from CLI: databricks bundle deploy -t dev
+# Standalone bundle — no GitHub required. Share this folder with customers.
+# Deploy from CLI: databricks bundle deploy -t dev
+# Or from Databricks: open this folder in Workspace/Repos, open databricks.yml, click Deployments (rocket)
 # See: https://docs.databricks.com/en/dev-tools/bundles/
+# Customer deployment: see docs/CUSTOMER_SETUP.md
 
 bundle:
   name: elexon-consumption-insights
+
+variables:
+  catalog_name:
+    description: Unity Catalog name for Elexon data
+    default: elexon_app_for_settlement_acc_catalog
 
 include:
   - resources/*.yml

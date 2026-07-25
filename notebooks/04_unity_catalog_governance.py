@@ -8,7 +8,8 @@
 
 # COMMAND ----------
 
-CATALOG = "elexon_app_for_settlement_acc_catalog"
+dbutils.widgets.text("catalog", "elexon_app_for_settlement_acc_catalog", "Catalog name")
+CATALOG = dbutils.widgets.get("catalog")
 SCHEMA_GOLD = "gold"
 SCHEMA_RECIPIENT = "recipient_shared"
 

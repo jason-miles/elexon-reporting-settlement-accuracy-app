@@ -1,97 +1,290 @@
 .page {
-  max-width: 1100px;
+  max-width: 1120px;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--elexon-red);
+  margin-bottom: 0.5rem;
 }
 
 .title {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 700;
-  margin: 0 0 0.35rem 0;
+  color: var(--elexon-gray-900);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
-  color: var(--elexon-gray-500);
-  margin: 0 0 1.5rem 0;
-  font-size: 0.95rem;
+  color: var(--elexon-gray-600);
+  margin: 0;
+  font-size: 1.02rem;
+  max-width: 62ch;
+}
+
+/* Stat tiles */
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.statTile {
+  background: var(--elexon-white);
+  border: 1px solid var(--elexon-gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--elexon-shadow-sm);
+  padding: 1.1rem 1.25rem;
+  border-left: 3px solid var(--elexon-gray-300);
+}
+
+.tone_red { border-left-color: var(--elexon-red); }
+.tone_amber { border-left-color: var(--elexon-warning); }
+.tone_neutral { border-left-color: var(--elexon-gray-400); }
+
+.statValue {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--elexon-gray-900);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.82rem;
+  color: var(--elexon-gray-600);
+  margin-top: 0.4rem;
+  font-weight: 500;
 }
 
 .section {
   margin: 2rem 0;
 }
 
-.sectionTitle {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0 0 1rem 0;
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
+.sectionTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--elexon-gray-900);
+}
+
+.badgeMuted {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--elexon-gray-500);
+  background: var(--elexon-gray-100);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+}
+
+/* Chart */
 .chartWrap {
   background: var(--elexon-white);
-  padding: 1rem;
-  border-radius: 8px;
+  padding: 1.25rem 1.25rem 1rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--elexon-gray-200);
   box-shadow: var(--elexon-shadow);
 }
 
+.legend {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--elexon-gray-200);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--elexon-gray-600);
+}
+
+.legendLine {
+  width: 16px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--elexon-red);
+}
+
+.legendDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--elexon-warning);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px var(--elexon-warning);
+}
+
+/* Table */
 .tableWrap {
   overflow-x: auto;
   background: var(--elexon-white);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--elexon-gray-200);
   box-shadow: var(--elexon-shadow);
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 .table th,
 .table td {
-  padding: 0.65rem 0.75rem;
+  padding: 0.75rem 0.9rem;
   text-align: left;
   border-bottom: 1px solid var(--elexon-gray-200);
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr {
+  transition: background 0.12s var(--ease);
+}
+
+.table tbody tr:hover {
+  background: var(--elexon-gray-50);
 }
 
 .table th {
-  background: var(--elexon-gray-100);
+  background: var(--elexon-gray-50);
   font-weight: 600;
+  color: var(--elexon-gray-600);
+  font-size: 0.76rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
   color: var(--elexon-gray-700);
 }
 
-.sev_high {
-  color: var(--elexon-red);
+/* Score bar */
+.scoreCell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 90px;
+}
+
+.scoreBar {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--elexon-gray-200);
+  overflow: hidden;
+}
+
+.scoreBar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--elexon-warning), var(--elexon-red));
+}
+
+.scoreVal {
+  font-size: 0.8rem;
   font-weight: 600;
+  color: var(--elexon-gray-700);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Severity badge */
+.sevBadge {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.sev_high {
+  background: var(--elexon-red-100);
+  color: var(--elexon-red-dark);
 }
 
 .sev_medium {
+  background: var(--elexon-warning-bg);
   color: var(--elexon-warning);
 }
 
 .sev_low {
-  color: var(--elexon-gray-500);
+  background: var(--elexon-gray-100);
+  color: var(--elexon-gray-600);
 }
 
+/* Alert feed */
 .alertList {
   list-style: none;
   padding: 0;
   margin: 0;
+  background: var(--elexon-white);
+  border: 1px solid var(--elexon-gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elexon-shadow);
+  overflow: hidden;
 }
 
 .alertItem {
   display: grid;
-  grid-template-columns: 100px 200px 1fr;
-  gap: 1rem;
-  padding: 0.6rem 0.75rem;
+  grid-template-columns: 4px 90px 190px 1fr;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--elexon-gray-200);
-  font-size: 0.9rem;
-  background: var(--elexon-white);
+  font-size: 0.88rem;
 }
 
-.alertItem:first-child {
-  border-radius: 8px 8px 0 0;
+.alertItem:last-child {
+  border-bottom: none;
 }
+
+.alertMarker {
+  width: 4px;
+  min-height: 1.6rem;
+  border-radius: 999px;
+  align-self: stretch;
+}
+.alertMarker.sev_high { background: var(--elexon-red); }
+.alertMarker.sev_medium { background: var(--elexon-warning); }
+.alertMarker.sev_low { background: var(--elexon-gray-400); }
 
 .alertTime {
   color: var(--elexon-gray-500);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.82rem;
 }
 
 .alertType {
@@ -100,11 +293,16 @@
 }
 
 .alertDetail {
-  color: var(--elexon-gray-700);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--elexon-gray-600);
 }
 
 @media (max-width: 768px) {
   .alertItem {
-    grid-template-columns: 1fr;
+    grid-template-columns: 4px 1fr;
+    row-gap: 0.35rem;
   }
+  .alertMarker { grid-row: 1 / 4; }
 }

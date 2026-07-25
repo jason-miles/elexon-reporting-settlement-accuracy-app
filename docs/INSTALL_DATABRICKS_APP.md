@@ -6,9 +6,9 @@ Two ways to run the React frontend:
 
 ## Option A: Run locally (quickest)
 
-1. **From your Mac**, in the project root (e.g. `elexon-reporting-settlement-accuracy-app2`):
+1. **From your machine**, in the bundle folder:
    ```bash
-   cd /Users/jason.miles/vibe-coding-repos/elexon-reporting-settlement-accuracy-app2/frontend
+   cd frontend
    npm install
    npm run build
    npm run preview
@@ -49,16 +49,15 @@ After the app is created, Databricks shows instructions. Use one of these:
 **A. Sync from your Mac (Databricks CLI):**
 
 ```bash
-cd /Users/jason.miles/vibe-coding-repos/elexon-reporting-settlement-accuracy-app2/frontend
+cd frontend
 databricks sync . /Workspace/Users/<your-email>/consumption-insights-app
 ```
 
 Then in Databricks: open the app → **Deploy** (or use the deploy button on the app details page).
 
-**B. Upload from Repos:**
+**B. Upload from Workspace/Repos:**
 
-1. In Databricks, open your **Repos** → `elexon-reporting-settlement-accuracy-app`.
-2. Go to the **frontend** folder.
+1. If you have uploaded the bundle folder to Databricks, open it and go to the **frontend** folder.
 3. Build in Repos (if Node is available) or build locally and upload the **frontend** folder (including `dist`) to the path shown in the app details (e.g. `/Workspace/Users/<you>/consumption-insights-app`).
 4. Click **Deploy** on the app.
 

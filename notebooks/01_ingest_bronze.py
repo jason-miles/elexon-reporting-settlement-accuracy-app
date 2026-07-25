@@ -12,7 +12,8 @@
 
 # COMMAND ----------
 
-CATALOG = "elexon_app_for_settlement_acc_catalog"
+dbutils.widgets.text("catalog", "elexon_app_for_settlement_acc_catalog", "Catalog name")
+CATALOG = dbutils.widgets.get("catalog")
 SCHEMA_BRONZE = "bronze"
 TABLE_RAW = "consumption_raw"
 

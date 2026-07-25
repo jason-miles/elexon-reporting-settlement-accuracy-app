@@ -1,27 +1,41 @@
 # Elexon Consumption Insights & Anomaly Detection
 
-Production-quality Databricks App demo for **Elexon** (GB electricity settlement), showcasing Data Sharing, Unity Catalog governance, and real-time anomaly detection on half-hourly consumption data.
+Production-quality Databricks App for **Elexon** (GB electricity settlement), showcasing Data Sharing, Unity Catalog governance, and real-time anomaly detection on half-hourly consumption data.
+
+This folder is a **standalone Databricks Asset Bundle** — no GitHub or git required. Share it with customers as a zip or folder.
 
 ---
 
-## Repository structure
+## Getting started
+
+| If you are… | Do this |
+|--------------|---------|
+| **A customer** receiving this bundle | Open **[docs/CUSTOMER_SETUP.md](docs/CUSTOMER_SETUP.md)** and follow the steps |
+| **A partner** sharing this with customers | See **[docs/SHARING_WITH_CUSTOMERS.md](docs/SHARING_WITH_CUSTOMERS.md)** |
+
+**Quick deploy (customers):**
+
+```bash
+cd /path/to/this-folder
+# 1. Edit databricks.yml: set targets.dev.workspace.host to your workspace URL
+# 2. Deploy and run setup
+databricks bundle deploy -t dev -v catalog_name=your_catalog
+databricks bundle run elexon_setup_only -t dev
+# 3. Open the app from Apps in your Databricks workspace
+```
+
+---
+
+## Bundle structure
 
 | Folder | Purpose |
-|--------|--------|
-| **backend** | Serverless/API helpers, shared Python utilities for Databricks jobs |
-| **frontend** | React app (Consumption Insights & Anomaly Detection) for Databricks App |
-| **data** | Sample/synthetic data generators, schema definitions, reference files |
-| **notebooks** | Databricks notebooks: setup, pipelines, Unity Catalog, ML, Delta Sharing |
-| **databricks.yml** + **resources/** | Databricks Asset Bundles (DABS) — jobs as code |
-
----
-
-## Cursor / IDE
-
-**Open this folder in Cursor:**  
-`/Users/jason.miles/vibe-coding-repos/elexon-reporting-settlement-accuracy-app2`
-
-(File → Open Folder → select the path above. After renaming from `supply-chain-resilience-copilot-app`, ensure Cursor is opened at the new path.)
+|--------|---------|
+| **databricks.yml** + **resources/** | Bundle config, jobs, and app definition |
+| **notebooks/** | Setup and pipeline notebooks (00–06) |
+| **frontend/** | React app (Consumption Insights & Anomaly Detection) |
+| **backend/** | Python utilities for Databricks jobs |
+| **data/** | Sample data, schemas, reference files |
+| **docs/** | Setup guides (CUSTOMER_SETUP, GENIE_SETUP, etc.) |
 
 ---
 
@@ -38,9 +52,11 @@ See **DEMO_GUIDE.md** for the full 7-minute script.
 
 ---
 
-## GitHub repository
+## For developers (internal)
 
-- **URL:** https://github.com/jason-miles/elexon-reporting-settlement-accuracy-app  
+The sections below are for internal development and GitHub/Databricks workspace setup. **Customers** should use [docs/CUSTOMER_SETUP.md](docs/CUSTOMER_SETUP.md).
+
+**GitHub repository:** https://github.com/jason-miles/elexon-reporting-settlement-accuracy-app  
 - **Username:** jason.miles@bcs.org.uk  
 
 ### Connect this codebase to GitHub from your Mac

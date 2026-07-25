@@ -1,0 +1,9 @@
+# Elexon Consumption Insights React app - Part of Databricks Asset Bundles (DABS)
+# Deploys with: databricks bundle deploy -t dev
+# After deploy, run the app from Workspace → Apps or: databricks bundle run elexon_insights_app -t dev
+resources:
+  apps:
+    elexon_insights_app:
+      name: elexon-consumption-insights
+      description: Elexon Consumption Insights & Anomaly Detection
+      source_code_path: ../frontend

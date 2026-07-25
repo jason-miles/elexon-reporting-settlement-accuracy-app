@@ -1,24 +1,58 @@
 /* Elexon brand: Tall Poppy #BD2426, white, modern */
 :root {
+  /* Brand */
   --elexon-red: #BD2426;
   --elexon-red-dark: #9a1d1f;
   --elexon-red-light: #e04d4f;
+  --elexon-red-50: #fff5f5;
+  --elexon-red-100: #ffe3e3;
+
+  /* Neutrals */
   --elexon-white: #ffffff;
-  --elexon-off-white: #f8f9fa;
+  --elexon-off-white: #f7f8fa;
+  --elexon-gray-50: #fbfcfd;
   --elexon-gray-100: #f1f3f5;
   --elexon-gray-200: #e9ecef;
+  --elexon-gray-300: #dee2e6;
+  --elexon-gray-400: #ced4da;
   --elexon-gray-500: #868e96;
+  --elexon-gray-600: #6b7280;
   --elexon-gray-700: #495057;
-  --elexon-gray-900: #212529;
+  --elexon-gray-900: #1a1d21;
+
+  /* Semantic */
   --elexon-success: #2f9e44;
-  --elexon-warning: #f59f00;
-  --elexon-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --elexon-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
-  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --elexon-success-bg: #ebfbee;
+  --elexon-warning: #e8890c;
+  --elexon-warning-bg: #fff9db;
+  --elexon-info: #2563eb;
+  --elexon-info-bg: #eff6ff;
+
+  /* Elevation */
+  --elexon-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --elexon-shadow: 0 1px 3px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04);
+  --elexon-shadow-md: 0 4px 12px rgba(16, 24, 40, 0.08), 0 2px 4px rgba(16, 24, 40, 0.04);
+  --elexon-shadow-lg: 0 12px 28px rgba(16, 24, 40, 0.12), 0 4px 8px rgba(16, 24, 40, 0.06);
+
+  /* Shape */
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+
+  /* Type */
+  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'SFMono-Regular', 'JetBrains Mono', Menlo, Consolas, monospace;
+
+  /* Motion */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -26,8 +60,10 @@ body {
   font-family: var(--font-sans);
   background: var(--elexon-off-white);
   color: var(--elexon-gray-900);
-  line-height: 1.5;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv05', 'ss01';
 }
 
 #root {
@@ -45,4 +81,20 @@ a:hover {
 button {
   font-family: inherit;
   cursor: pointer;
+}
+
+::selection {
+  background: var(--elexon-red-100);
+  color: var(--elexon-red-dark);
+}
+
+/* Subtle scroll-in for page content */
+@keyframes elexon-fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
 }

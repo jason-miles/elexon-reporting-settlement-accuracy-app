@@ -2,13 +2,15 @@
 
 Genie lets users ask natural language questions about Elexon consumption and anomaly data. Answers are generated from Unity Catalog tables with full governance (row filters, column masks apply).
 
+**Note:** If you deployed with a custom catalog (via `catalog_name` variable), replace `elexon_app_for_settlement_acc_catalog` in the examples below with your catalog name.
+
 ---
 
 ## Requirements
 
 - **Databricks SQL** entitlement
 - **SQL warehouse** (pro or serverless) with CAN USE permission
-- **Unity Catalog** tables: `elexon_app_for_settlement_acc_catalog.gold.consumption_half_hourly`, `anomalies`, etc.
+- **Unity Catalog** tables: `{your_catalog}.gold.consumption_half_hourly`, `anomalies`, etc.
 - **Partner-powered AI** enabled (account admin) for Genie
 
 ---
@@ -18,7 +20,7 @@ Genie lets users ask natural language questions about Elexon consumption and ano
 ### 1. Create the space
 
 1. In Databricks, click **New** (top right) → **Genie**
-2. **Add data:** Select tables from `elexon_app_for_settlement_acc_catalog`:
+2. **Add data:** Select tables from your catalog (e.g. `elexon_app_for_settlement_acc_catalog` or the `catalog_name` you used):
    - `gold.consumption_half_hourly`
    - `gold.anomalies`
    - Optional: `gold.consumption_daily`, `recipient_shared.*`

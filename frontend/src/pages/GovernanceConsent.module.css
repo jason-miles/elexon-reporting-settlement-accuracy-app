@@ -1,17 +1,34 @@
 .page {
-  max-width: 900px;
+  max-width: 960px;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--elexon-red);
+  margin-bottom: 0.5rem;
 }
 
 .title {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 700;
-  margin: 0 0 0.35rem 0;
+  color: var(--elexon-gray-900);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
-  color: var(--elexon-gray-500);
-  margin: 0 0 1.5rem 0;
-  font-size: 0.95rem;
+  color: var(--elexon-gray-600);
+  margin: 0;
+  font-size: 1.02rem;
+  max-width: 62ch;
 }
 
 .section {
@@ -19,34 +36,56 @@
 }
 
 .sectionTitle {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 600;
   margin: 0 0 1rem 0;
+  color: var(--elexon-gray-900);
 }
 
 .purposeGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
 }
 
 .purposeCard {
+  position: relative;
   text-align: left;
-  padding: 1rem 1.25rem;
-  border: 2px solid var(--elexon-gray-200);
-  border-radius: 8px;
+  padding: 1.15rem 1.25rem;
+  border: 1px solid var(--elexon-gray-200);
+  border-radius: var(--radius);
   background: var(--elexon-white);
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
+  box-shadow: var(--elexon-shadow-sm);
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
 }
 
 .purposeCard:hover {
   border-color: var(--elexon-red-light);
+  transform: translateY(-2px);
+  box-shadow: var(--elexon-shadow-md);
 }
 
 .purposeCardActive {
   border-color: var(--elexon-red);
-  background: #fff5f5;
+  background: var(--elexon-red-50);
+  box-shadow: 0 0 0 1px var(--elexon-red), var(--elexon-shadow-md);
+}
+
+.purposeCardActive::after {
+  content: '✓';
+  position: absolute;
+  top: 0.85rem;
+  right: 0.95rem;
+  width: 1.35rem;
+  height: 1.35rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--elexon-red);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
 }
 
 .purposeLabel {
@@ -58,53 +97,76 @@
 
 .purposeDesc {
   font-size: 0.85rem;
-  color: var(--elexon-gray-700);
+  color: var(--elexon-gray-600);
+  line-height: 1.5;
 }
 
 .purposeNote {
   margin-top: 1rem;
   font-size: 0.9rem;
-  color: var(--elexon-gray-700);
+  color: var(--elexon-gray-600);
+  padding: 0.75rem 1rem;
+  background: var(--elexon-gray-50);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--elexon-gray-200);
 }
 
 .tableWrap {
   overflow-x: auto;
   background: var(--elexon-white);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--elexon-gray-200);
   box-shadow: var(--elexon-shadow);
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 .table th,
 .table td {
-  padding: 0.65rem 0.75rem;
+  padding: 0.75rem 0.9rem;
   text-align: left;
   border-bottom: 1px solid var(--elexon-gray-200);
 }
 
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background: var(--elexon-gray-50);
+}
+
 .table th {
-  background: var(--elexon-gray-100);
+  background: var(--elexon-gray-50);
   font-weight: 600;
+  color: var(--elexon-gray-600);
+  font-size: 0.76rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 code {
+  font-family: var(--font-mono);
   background: var(--elexon-gray-100);
   padding: 0.15rem 0.4rem;
   border-radius: 4px;
   font-size: 0.85em;
+  color: var(--elexon-red-dark);
 }
 
 .auditSnippet {
   margin: 1rem 0 0 0;
-  padding: 1rem;
-  background: var(--elexon-gray-900);
-  color: var(--elexon-gray-100);
-  border-radius: 8px;
+  padding: 1.1rem 1.25rem;
+  background: #16181d;
+  color: #e6e8eb;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
   font-size: 0.8rem;
+  line-height: 1.6;
   overflow-x: auto;
+  box-shadow: var(--elexon-shadow-md);
 }

@@ -27,9 +27,17 @@ yarn-error.log*
 # IDE
 .vscode/
 .idea/
+.cursor/
 *.swp
 *.swo
 .DS_Store
 
+# AI tooling (local dev kit)
+.ai-dev-kit/
+
 # Databricks
 .databricks/
+
+# Build/redeploy artifacts
+*.zip
+STATUS_*.md

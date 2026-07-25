@@ -14,10 +14,13 @@ export default function GovernanceConsent() {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.title}>Governance & Consent</h1>
-      <p className={styles.subtitle}>
-        Who can see what; use-case purpose selection; MPAN masking; audit snippet.
-      </p>
+      <header className={styles.header}>
+        <span className={styles.eyebrow}>Governance &amp; Consent</span>
+        <h1 className={styles.title}>Who can see what</h1>
+        <p className={styles.subtitle}>
+          Use-case purpose selection, MPAN masking, grants, and audit — enforced by Unity Catalog.
+        </p>
+      </header>
 
       <Callout title="Purpose-based access">
         Access is controlled by Unity Catalog roles aligned to use-case purposes: settlement sees

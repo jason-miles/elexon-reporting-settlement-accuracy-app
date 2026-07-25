@@ -41,8 +41,9 @@
 # COMMAND ----------
 
 # Config: catalog and schemas (medallion + recipient)
-# Use your workspace catalog (must match the name in Catalog Explorer exactly, e.g. elexon_app_for_settlement_acc_catalog):
-CATALOG = "elexon_app_for_settlement_acc_catalog"
+# Catalog can be set via job parameter "catalog" or widget when run manually:
+dbutils.widgets.text("catalog", "elexon_app_for_settlement_acc_catalog", "Catalog name")
+CATALOG = dbutils.widgets.get("catalog")
 SCHEMA_BRONZE = "bronze"
 SCHEMA_SILVER = "silver"
 SCHEMA_GOLD = "gold"

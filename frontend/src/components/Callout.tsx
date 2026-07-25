@@ -3,6 +3,13 @@ import styles from './Callout.module.css'
 
 type Variant = 'default' | 'success' | 'warning' | 'info'
 
+const icons: Record<Variant, string> = {
+  default: 'ℹ',
+  success: '✓',
+  warning: '!',
+  info: 'ℹ',
+}
+
 export default function Callout({
   title,
   children,
@@ -14,8 +21,13 @@ export default function Callout({
 }) {
   return (
     <div className={`${styles.callout} ${styles[variant]}`}>
-      <div className={styles.calloutTitle}>{title}</div>
-      <div className={styles.calloutBody}>{children}</div>
+      <span className={styles.icon} aria-hidden="true">
+        {icons[variant]}
+      </span>
+      <div className={styles.content}>
+        <div className={styles.calloutTitle}>{title}</div>
+        <div className={styles.calloutBody}>{children}</div>
+      </div>
     </div>
   )
 }

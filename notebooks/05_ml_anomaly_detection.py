@@ -10,7 +10,8 @@
 
 # COMMAND ----------
 
-CATALOG = "elexon_app_for_settlement_acc_catalog"
+dbutils.widgets.text("catalog", "elexon_app_for_settlement_acc_catalog", "Catalog name")
+CATALOG = dbutils.widgets.get("catalog")
 SCHEMA_GOLD = "gold"
 MLFLOW_EXPERIMENT = "/Shared/elexon_anomaly"
 
@@ -46,7 +47,7 @@ from datetime import datetime
 # COMMAND ----------
 
 # After restartPython() in cell 3, session state is cleared — redefine config so this cell runs without re-running cell 2.
-CATALOG = "elexon_app_for_settlement_acc_catalog"
+CATALOG = dbutils.widgets.get("catalog")
 SCHEMA_GOLD = "gold"
 MLFLOW_EXPERIMENT = "/Shared/elexon_anomaly"
 

@@ -5,10 +5,14 @@ import styles from './DataSharing.module.css'
 export default function DataSharing() {
   return (
     <div className={styles.page}>
-      <h1 className={styles.title}>Data Sharing</h1>
-      <p className={styles.subtitle}>
-        Provider workspace shares curated tables to Recipient via Delta Sharing; Recipient sees only permitted tables/columns.
-      </p>
+      <header className={styles.header}>
+        <span className={styles.eyebrow}>Data Sharing</span>
+        <h1 className={styles.title}>Share without copying</h1>
+        <p className={styles.subtitle}>
+          The Provider workspace shares curated tables to a Recipient via Delta Sharing; the
+          Recipient sees only permitted tables and columns.
+        </p>
+      </header>
 
       <Callout title="Delta Sharing simulation">
         The Provider (Elexon) curates gold tables (e.g. <code>gold_consumption_curated</code>, <code>gold_anomalies</code>)
@@ -17,9 +21,10 @@ export default function DataSharing() {
       </Callout>
 
       <div className={styles.twoCol}>
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>Provider view (Elexon)</h2>
-          <p className={styles.sectionDesc}>Full gold schema: consumption, aggregates, anomalies, and curated shareables.</p>
+        <section className={`${styles.section} ${styles.provider}`}>
+          <span className={styles.roleTag}>Provider · Elexon</span>
+          <h2 className={styles.sectionTitle}>Full gold schema</h2>
+          <p className={styles.sectionDesc}>Consumption, aggregates, anomalies, and curated shareables.</p>
           <ul className={styles.tableList}>
             {mockProviderTables.map((t, i) => (
               <li key={i}>
@@ -29,9 +34,15 @@ export default function DataSharing() {
           </ul>
         </section>
 
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>Recipient view</h2>
-          <p className={styles.sectionDesc}>Only shared tables in <code>recipient_shared</code> (or via Delta Share).</p>
+        <div className={styles.flow} aria-hidden="true">
+          <span className={styles.flowIcon}>⇄</span>
+          <span className={styles.flowLabel}>Delta Share</span>
+        </div>
+
+        <section className={`${styles.section} ${styles.recipient}`}>
+          <span className={`${styles.roleTag} ${styles.roleTagRecipient}`}>Recipient</span>
+          <h2 className={styles.sectionTitle}>Shared tables only</h2>
+          <p className={styles.sectionDesc}>Just what lands in <code>recipient_shared</code> — no raw or internal schemas.</p>
           <ul className={styles.tableList}>
             {mockRecipientTables.map((t, i) => (
               <li key={i}>

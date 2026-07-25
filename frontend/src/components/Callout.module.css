@@ -1,23 +1,78 @@
 .callout {
-  padding: 1rem 1.25rem;
-  border-radius: 8px;
-  border-left: 4px solid var(--elexon-red);
+  display: flex;
+  gap: 0.85rem;
+  padding: 1rem 1.15rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--elexon-gray-200);
+  border-left: 3px solid var(--elexon-red);
   background: var(--elexon-white);
-  box-shadow: var(--elexon-shadow);
+  box-shadow: var(--elexon-shadow-sm);
   margin: 1rem 0;
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1;
+  background: var(--elexon-red-100);
+  color: var(--elexon-red);
+}
+
+.content {
+  min-width: 0;
 }
 
 .calloutTitle {
   font-weight: 600;
   color: var(--elexon-gray-900);
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.2rem;
+  font-size: 0.95rem;
 }
 
 .calloutBody {
   color: var(--elexon-gray-700);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
 }
 
-.callout.success { border-left-color: var(--elexon-success); }
-.callout.warning { border-left-color: var(--elexon-warning); }
-.callout.info { border-left-color: #2563eb; }
+.calloutBody ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.calloutBody li {
+  margin-bottom: 0.25rem;
+}
+
+/* Variants */
+.success {
+  border-left-color: var(--elexon-success);
+  background: linear-gradient(0deg, var(--elexon-success-bg), var(--elexon-white) 60%);
+}
+.success .icon {
+  background: rgba(47, 158, 68, 0.12);
+  color: var(--elexon-success);
+}
+
+.warning {
+  border-left-color: var(--elexon-warning);
+  background: linear-gradient(0deg, var(--elexon-warning-bg), var(--elexon-white) 60%);
+}
+.warning .icon {
+  background: rgba(232, 137, 12, 0.14);
+  color: var(--elexon-warning);
+}
+
+.info {
+  border-left-color: var(--elexon-info);
+  background: linear-gradient(0deg, var(--elexon-info-bg), var(--elexon-white) 60%);
+}
+.info .icon {
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--elexon-info);
+}
