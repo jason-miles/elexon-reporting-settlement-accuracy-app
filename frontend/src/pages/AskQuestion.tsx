@@ -1,5 +1,6 @@
 import styles from './AskQuestion.module.css'
 import Callout from '../components/Callout'
+import PageHero from '../components/PageHero'
 import { GENIE_SPACE_URL } from '../utils/genieConfig'
 
 const examples = [
@@ -24,14 +25,12 @@ export default function AskQuestion() {
 
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <span className={styles.eyebrow}>Ask a Question</span>
-        <h1 className={styles.title}>Query your data in plain English</h1>
-        <p className={styles.subtitle}>
-          <strong>Databricks AI/BI Genie</strong> translates natural-language questions into governed
-          SQL over Unity Catalog — you only see data you have permission to access.
-        </p>
-      </header>
+      <PageHero
+        eyebrow="Ask a Question · Genie"
+        title="Query your data in"
+        titleAccent="plain English"
+        subtitle="Databricks AI/BI Genie translates natural-language questions into governed SQL over Unity Catalog — you only see data you have permission to access."
+      />
 
       <div className={styles.hero}>
         <div className={styles.heroIcon} aria-hidden="true">💬</div>

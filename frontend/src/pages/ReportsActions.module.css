@@ -36,6 +36,21 @@
   max-width: 60ch;
 }
 
+/* Hero CTA (on dark hero) */
+.heroButton {
+  background: #fff;
+  color: var(--elexon-red-dark);
+  border: none;
+  padding: 0.7rem 1.3rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--elexon-shadow-md);
+  white-space: nowrap;
+  transition: transform 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+.heroButton:hover { transform: translateY(-2px); box-shadow: var(--elexon-shadow-lg); }
+
 /* Buttons */
 .primaryButton {
   background: var(--elexon-red);

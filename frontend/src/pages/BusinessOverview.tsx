@@ -1,4 +1,5 @@
 import Callout from '../components/Callout'
+import PageHero from '../components/PageHero'
 import styles from './BusinessOverview.module.css'
 
 const capabilities = [
@@ -33,13 +34,17 @@ const useCases = [
 export default function BusinessOverview() {
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <span className={styles.eyebrow}>Business Overview</span>
-        <h1 className={styles.title}>Why this matters</h1>
-        <p className={styles.subtitle}>
-          The business context and value of consumption insights for Elexon and industry signatories.
-        </p>
-      </header>
+      <PageHero
+        eyebrow="Business Overview"
+        title="Why this"
+        titleAccent="matters"
+        subtitle="The business context and value of consumption insights for Elexon and industry signatories — settlement accuracy, market monitoring, and research."
+        stats={[
+          { value: '~40M', label: 'MPANs in production' },
+          { value: '3', label: 'Governed use cases' },
+          { value: '48h', label: 'Late-data watermark' },
+        ]}
+      />
 
       <Callout title="Business value" variant="success">
         Consumption Insights &amp; Anomaly Detection gives Elexon and signatories a single place to

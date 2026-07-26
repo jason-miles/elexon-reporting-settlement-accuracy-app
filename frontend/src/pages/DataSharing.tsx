@@ -1,18 +1,22 @@
 import Callout from '../components/Callout'
+import PageHero from '../components/PageHero'
 import { mockProviderTables, mockRecipientTables } from '../utils/mockData'
 import styles from './DataSharing.module.css'
 
 export default function DataSharing() {
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <span className={styles.eyebrow}>Data Sharing</span>
-        <h1 className={styles.title}>Share without copying</h1>
-        <p className={styles.subtitle}>
-          The Provider workspace shares curated tables to a Recipient via Delta Sharing; the
-          Recipient sees only permitted tables and columns.
-        </p>
-      </header>
+      <PageHero
+        eyebrow="Data Sharing"
+        title="Share without"
+        titleAccent="copying"
+        subtitle="The Provider workspace shares curated tables to a Recipient via Delta Sharing; the Recipient sees only permitted tables and columns — no data movement, no lock-in."
+        stats={[
+          { value: '0', label: 'Copies made' },
+          { value: '2', label: 'Curated tables shared' },
+          { value: 'UC', label: 'Governed end-to-end' },
+        ]}
+      />
 
       <Callout title="Delta Sharing simulation">
         The Provider (Elexon) curates gold tables (e.g. <code>gold_consumption_curated</code>, <code>gold_anomalies</code>)

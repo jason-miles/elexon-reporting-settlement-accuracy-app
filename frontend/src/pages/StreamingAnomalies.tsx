@@ -10,6 +10,7 @@ import {
   ReferenceDot,
 } from 'recharts'
 import Callout from '../components/Callout'
+import PageHero from '../components/PageHero'
 import { mockAnomalies, mockTimeSeries } from '../utils/mockData'
 import styles from './StreamingAnomalies.module.css'
 
@@ -58,14 +59,12 @@ export default function StreamingAnomalies() {
 
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <span className={styles.eyebrow}>Streaming Anomalies</span>
-        <h1 className={styles.title}>Real-time detection</h1>
-        <p className={styles.subtitle}>
-          Consumption trends, top anomalies, and a live alert feed — theft, meter issues, network
-          events, and maintenance.
-        </p>
-      </header>
+      <PageHero
+        eyebrow="Streaming Anomalies · Live"
+        title="Real-time"
+        titleAccent="detection"
+        subtitle="Consumption trends, top anomalies, and a live alert feed — theft, meter issues, network events, and maintenance, scored by ML on half-hourly reads."
+      />
 
       <div className={styles.statGrid}>
         {stats.map((s) => (

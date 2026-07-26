@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import Callout from '../components/Callout'
+import PageHero from '../components/PageHero'
 import {
   mockReports,
   reportCategories,
@@ -93,19 +94,17 @@ export default function ReportsActions() {
 
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <div>
-          <span className={styles.eyebrow}>Reports &amp; Actions</span>
-          <h1 className={styles.title}>Log reports, take action</h1>
-          <p className={styles.subtitle}>
-            Raise a case against an anomaly, assign an owner, and track it through to resolution —
-            with a full activity trail for audit.
-          </p>
-        </div>
-        <button className={styles.primaryButton} onClick={() => setShowForm((s) => !s)}>
-          {showForm ? 'Close' : '+ Log new report'}
-        </button>
-      </header>
+      <PageHero
+        eyebrow="Reports & Actions"
+        title="Log reports,"
+        titleAccent="take action"
+        subtitle="Raise a case against an anomaly, assign an owner, and track it through to resolution — with a full activity trail for audit."
+        aside={
+          <button className={styles.heroButton} onClick={() => setShowForm((s) => !s)}>
+            {showForm ? 'Close' : '+ Log new report'}
+          </button>
+        }
+      />
 
       <div className={styles.statGrid}>
         {stats.map((s) => (

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Callout from '../components/Callout'
+import PageHero from '../components/PageHero'
 import { mockGrants } from '../utils/mockData'
 import styles from './GovernanceConsent.module.css'
 
@@ -14,13 +15,17 @@ export default function GovernanceConsent() {
 
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <span className={styles.eyebrow}>Governance &amp; Consent</span>
-        <h1 className={styles.title}>Who can see what</h1>
-        <p className={styles.subtitle}>
-          Use-case purpose selection, MPAN masking, grants, and audit — enforced by Unity Catalog.
-        </p>
-      </header>
+      <PageHero
+        eyebrow="Governance & Consent"
+        title="Who can"
+        titleAccent="see what"
+        subtitle="Use-case purpose selection, MPAN masking, grants, and audit — all enforced by Unity Catalog."
+        stats={[
+          { value: '4', label: 'Purpose-based roles' },
+          { value: 'PII', label: 'MPAN masked' },
+          { value: '100%', label: 'Access audited' },
+        ]}
+      />
 
       <Callout title="Purpose-based access">
         Access is controlled by Unity Catalog roles aligned to use-case purposes: settlement sees
