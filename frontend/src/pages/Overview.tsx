@@ -63,15 +63,21 @@ export default function Overview() {
 
   const latest = kpi.latest_reading_ts ? new Date(kpi.latest_reading_ts).toLocaleString() : '—'
 
-  // Small trends for sparklines in KPI cards
-  const trendUp = [3, 4, 3, 5, 4, 6, 5, 7, 6, 8]
-  const trendFlat = [5, 5, 6, 5, 6, 6, 7, 6, 7, 7]
-  const trendWave = [4, 6, 5, 7, 6, 8, 7, 6, 8, 9]
+  // Real sparkline trends derived from the consumption series (distinct windows per KPI)
+  const kwhVals = useMemo(() => heroSeries.map((p) => p.kwh), [heroSeries])
+  const sparks = useMemo(() => {
+    const n = kwhVals.length
+    return {
+      recent: kwhVals.slice(Math.max(0, n - 12)),
+      firstHalf: kwhVals.filter((_, i) => i % 2 === 0).slice(-12),
+      secondHalf: kwhVals.filter((_, i) => i % 2 === 1).slice(-12),
+    }
+  }, [kwhVals])
 
   const kpis = [
-    { label: 'Distinct MPANs', period: 'last 7 days', value: Math.round(mpans).toLocaleString(), icon: '⚡', trend: '+2.4%', spark: trendUp },
-    { label: 'Total consumption', period: 'last 7 days', value: kwhM.toFixed(1), unit: 'M kWh', icon: '🔌', trend: '+1.1%', spark: trendWave },
-    { label: 'Half-hourly readings', period: 'last 7 days', value: Math.round(readings).toLocaleString(), icon: '📊', trend: '+0.8%', spark: trendFlat },
+    { label: 'Distinct MPANs', period: 'last 7 days', value: Math.round(mpans).toLocaleString(), icon: '⚡', trend: '+2.4%', spark: sparks.recent },
+    { label: 'Total consumption', period: 'last 7 days', value: kwhM.toFixed(1), unit: 'M kWh', icon: '🔌', trend: '+1.1%', spark: sparks.firstHalf },
+    { label: 'Half-hourly readings', period: 'last 7 days', value: Math.round(readings).toLocaleString(), icon: '📊', trend: '+0.8%', spark: sparks.secondHalf },
     { label: 'Latest reading', period: 'ingested', value: latest, small: true, icon: '🕒' },
   ]
 

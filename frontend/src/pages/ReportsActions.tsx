@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import Callout from '../components/Callout'
 import PageHero from '../components/PageHero'
 import {
@@ -20,10 +20,18 @@ const statusLabel: Record<ReportStatus, string> = {
 
 const nowIso = () => new Date().toISOString()
 const fmt = (ts: string) => new Date(ts).toLocaleString()
-let seq = 1043
+
+/** Highest numeric suffix across existing RPT-#### ids, so new ids never collide. */
+function maxReportSeq(reports: CaseReport[]): number {
+  return reports.reduce((max, r) => {
+    const n = parseInt(r.report_id.replace(/\D/g, ''), 10)
+    return Number.isFinite(n) ? Math.max(max, n) : max
+  }, 1000)
+}
 
 export default function ReportsActions() {
   const [reports, setReports] = useState<CaseReport[]>(mockReports)
+  const seqRef = useRef(maxReportSeq(mockReports))
   const [selectedId, setSelectedId] = useState<string | null>(mockReports[0]?.report_id ?? null)
   const [filter, setFilter] = useState<'all' | ReportStatus>('all')
   const [showForm, setShowForm] = useState(false)
@@ -72,7 +80,8 @@ export default function ReportsActions() {
   const submitReport = (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.title.trim()) return
-    const id = `RPT-${seq++}`
+    seqRef.current += 1
+    const id = `RPT-${seqRef.current}`
     const newReport: CaseReport = {
       report_id: id,
       title: form.title.trim(),
