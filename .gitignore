@@ -16,6 +16,9 @@ node_modules/
 frontend/dist/
 frontend/.vite/
 frontend/tsconfig.tsbuildinfo
+presentation/dist/
+presentation/node_modules/
+presentation/*.tsbuildinfo
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
