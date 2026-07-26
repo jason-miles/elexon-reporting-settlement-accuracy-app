@@ -2,35 +2,6 @@
   max-width: 1000px;
 }
 
-.header {
-  margin-bottom: 1.5rem;
-}
-
-.eyebrow {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--elexon-red);
-  margin-bottom: 0.5rem;
-}
-
-.title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--elexon-gray-900);
-  margin: 0 0 0.5rem 0;
-  letter-spacing: -0.02em;
-}
-
-.subtitle {
-  color: var(--elexon-gray-600);
-  margin: 0;
-  font-size: 1.02rem;
-  max-width: 60ch;
-}
-
 .section {
   margin: 2rem 0;
 }

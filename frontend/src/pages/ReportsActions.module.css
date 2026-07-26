@@ -2,40 +2,6 @@
   max-width: 1160px;
 }
 
-.header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 1.5rem;
-}
-
-.eyebrow {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--elexon-red);
-  margin-bottom: 0.5rem;
-}
-
-.title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--elexon-gray-900);
-  margin: 0 0 0.5rem 0;
-  letter-spacing: -0.02em;
-}
-
-.subtitle {
-  color: var(--elexon-gray-600);
-  margin: 0;
-  font-size: 1.02rem;
-  max-width: 60ch;
-}
-
 /* Hero CTA (on dark hero) */
 .heroButton {
   background: #fff;
@@ -397,6 +363,10 @@
 }
 
 /* Timeline */
+.timeline {
+  margin-top: 0.25rem;
+}
+
 .timelineTitle {
   font-size: 1rem;
   font-weight: 600;
@@ -434,6 +404,11 @@
   background: var(--elexon-red);
   margin-top: 3px;
   box-shadow: 0 0 0 3px var(--elexon-red-50);
+}
+
+.timelineBody {
+  flex: 1;
+  min-width: 0;
 }
 
 .timelineTop {

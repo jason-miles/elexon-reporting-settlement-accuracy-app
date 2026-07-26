@@ -57,6 +57,10 @@
   .heroContent { grid-template-columns: 1fr; gap: 1.5rem; }
 }
 
+.heroLeft {
+  min-width: 0; /* allow long text to wrap instead of overflowing the grid track */
+}
+
 .eyebrow {
   display: inline-flex;
   align-items: center;
