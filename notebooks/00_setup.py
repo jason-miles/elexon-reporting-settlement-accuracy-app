@@ -166,6 +166,26 @@ spark.sql(f"""
     created_at TIMESTAMP
   ) USING DELTA
 """)
+
+# Gold: case_reports (Reports & Actions tab — written by the app backend)
+# `actions` holds a JSON-encoded activity trail: [{ts, actor, action, note}]
+spark.sql(f"""
+  CREATE TABLE IF NOT EXISTS {CATALOG}.{SCHEMA_GOLD}.case_reports (
+    report_id STRING NOT NULL,
+    title STRING,
+    category STRING,
+    linked_anomaly STRING,
+    mpan_id STRING,
+    priority STRING,
+    status STRING,
+    assignee STRING,
+    description STRING,
+    actions STRING,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+  ) USING DELTA
+  COMMENT 'Case reports raised against anomalies (Reports & Actions tab).'
+""")
 print("Gold tables created.")
 
 # COMMAND ----------

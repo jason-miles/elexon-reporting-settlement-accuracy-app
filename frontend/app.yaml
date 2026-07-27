@@ -1,5 +1,18 @@
 # Databricks App config for Consumption Insights & Anomaly Detection
-# See https://docs.databricks.com/dev-tools/databricks-apps/
-# Command runs after npm install and npm run build during deployment
-run:
-  - npm run start
+# FastAPI backend serves the React frontend AND the /api/reports store
+# (Unity Catalog gold.case_reports). Python deps install from requirements.txt.
+#
+# Node is available in the Apps runtime (the previous build used `npm run build`),
+# so we build the SPA into dist/ then launch uvicorn — no need to sync dist/.
+command:
+  - "sh"
+  - "-c"
+  - "npm ci && npm run build && uvicorn main:app --host 0.0.0.0 --port $DATABRICKS_APP_PORT"
+
+env:
+  - name: ELEXON_CATALOG
+    value: "elexon_app_for_settlement_acc_catalog"
+  - name: ELEXON_SCHEMA
+    value: "gold"
+  - name: DATABRICKS_WAREHOUSE_ID
+    value: "d0305022e6c3db8e"

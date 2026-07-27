@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Callout from '../components/Callout'
 import PageHero from '../components/PageHero'
 import {
@@ -9,6 +9,7 @@ import {
   type ReportStatus,
   type ReportPriority,
 } from '../utils/mockData'
+import { fetchReports, createReport, addAction } from '../utils/reportsApi'
 import styles from './ReportsActions.module.css'
 
 const statusLabel: Record<ReportStatus, string> = {
@@ -30,11 +31,37 @@ function maxReportSeq(reports: CaseReport[]): number {
 }
 
 export default function ReportsActions() {
-  const [reports, setReports] = useState<CaseReport[]>(mockReports)
-  const seqRef = useRef(maxReportSeq(mockReports))
-  const [selectedId, setSelectedId] = useState<string | null>(mockReports[0]?.report_id ?? null)
+  const [reports, setReports] = useState<CaseReport[]>([])
+  const seqRef = useRef(1042)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
   const [filter, setFilter] = useState<'all' | ReportStatus>('all')
   const [showForm, setShowForm] = useState(false)
+  const [source, setSource] = useState<'live' | 'demo'>('live')
+  const [busy, setBusy] = useState(false)
+
+  // Load from the backend; fall back to seeded mock data if the API is absent
+  // (e.g. `npm run dev` with no FastAPI running).
+  useEffect(() => {
+    let cancelled = false
+    fetchReports()
+      .then((rows) => {
+        if (cancelled) return
+        setReports(rows)
+        setSource('live')
+        seqRef.current = maxReportSeq(rows)
+        setSelectedId(rows[0]?.report_id ?? null)
+      })
+      .catch(() => {
+        if (cancelled) return
+        setReports(mockReports)
+        setSource('demo')
+        seqRef.current = maxReportSeq(mockReports)
+        setSelectedId(mockReports[0]?.report_id ?? null)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   // New-report form state
   const [form, setForm] = useState({
@@ -62,37 +89,66 @@ export default function ReportsActions() {
     ]
   }, [reports])
 
-  const applyAction = (id: string, action: string, status: ReportStatus, actor = 'You', note?: string) => {
+  const upsert = (updated: CaseReport) =>
+    setReports((prev) => prev.map((r) => (r.report_id === updated.report_id ? updated : r)))
+
+  const applyAction = async (id: string, action: string, status: ReportStatus, actor = 'You', note?: string) => {
+    // Optimistic local update
     setReports((prev) =>
       prev.map((r) =>
         r.report_id === id
-          ? {
-              ...r,
-              status,
-              updated_at: nowIso(),
-              actions: [...r.actions, { ts: nowIso(), actor, action, note }],
-            }
+          ? { ...r, status, updated_at: nowIso(), actions: [...r.actions, { ts: nowIso(), actor, action, note }] }
           : r,
       ),
     )
+    if (source === 'live') {
+      try {
+        const saved = await addAction(id, { action, status, actor, note })
+        upsert(saved)
+      } catch {
+        setSource('demo') // backend dropped mid-session; keep working locally
+      }
+    }
   }
 
-  const submitReport = (e: React.FormEvent) => {
+  const submitReport = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.title.trim()) return
-    seqRef.current += 1
-    const id = `RPT-${seqRef.current}`
-    const newReport: CaseReport = {
-      report_id: id,
+    if (!form.title.trim() || busy) return
+    const payload = {
       title: form.title.trim(),
       category: form.category,
       mpan_id: form.mpan_id.trim() || '***----',
       priority: form.priority,
-      status: 'open',
       assignee: form.assignee,
+      description: form.description.trim(),
+    }
+
+    if (source === 'live') {
+      setBusy(true)
+      try {
+        const saved = await createReport(payload)
+        setReports((prev) => [saved, ...prev])
+        setSelectedId(saved.report_id)
+        setShowForm(false)
+        setForm({ title: '', category: reportCategories[0], mpan_id: '', priority: 'medium', assignee: assignees[0], description: '' })
+        return
+      } catch {
+        setSource('demo') // fall through to local create
+      } finally {
+        setBusy(false)
+      }
+    }
+
+    // Demo / offline create
+    seqRef.current += 1
+    const id = `RPT-${seqRef.current}`
+    const newReport: CaseReport = {
+      report_id: id,
+      ...payload,
+      linked_anomaly: undefined,
+      status: 'open',
       created_at: nowIso(),
       updated_at: nowIso(),
-      description: form.description.trim(),
       actions: [{ ts: nowIso(), actor: 'You', action: 'Report created' }],
     }
     setReports((prev) => [newReport, ...prev])
@@ -298,11 +354,19 @@ export default function ReportsActions() {
         )}
       </div>
 
-      <Callout variant="info" title="Demo behaviour">
-        Reports and actions are held in the browser for this demo. In production, cases would be
-        written to a governed Unity Catalog table (e.g. <code>gold.case_reports</code>) via an app
-        backend, with the activity trail feeding the audit log.
-      </Callout>
+      {source === 'live' ? (
+        <Callout variant="success" title="Live — persisted to Unity Catalog">
+          Reports and actions are written to <code>gold.case_reports</code> via the app's FastAPI
+          backend (running as the app service principal against a SQL warehouse). Changes survive
+          refreshes and the activity trail feeds the audit log.
+        </Callout>
+      ) : (
+        <Callout variant="info" title="Demo mode (no backend)">
+          The reports API isn't reachable, so cases are held in the browser and reset on refresh.
+          When deployed as a Databricks App, they persist to <code>gold.case_reports</code> via the
+          FastAPI backend.
+        </Callout>
+      )}
     </div>
   )
 }
