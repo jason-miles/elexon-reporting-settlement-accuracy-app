@@ -48,18 +48,34 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _sql_str(v: Optional[str]) -> str:
-    """Safely single-quote a string for inline SQL."""
-    if v is None:
-        return "NULL"
-    return "'" + v.replace("'", "''") + "'"
+def _params(mapping: Optional[dict[str, Any]]):
+    """Build named StatementParameterListItem list from a {name: value} dict.
+
+    None values are sent without a value, which the API binds as SQL NULL.
+    """
+    if not mapping:
+        return None
+    from databricks.sdk.service.sql import StatementParameterListItem
+
+    items = []
+    for name, value in mapping.items():
+        if value is None:
+            items.append(StatementParameterListItem(name=name))
+        else:
+            items.append(StatementParameterListItem(name=name, value=str(value)))
+    return items
 
 
-def _run(statement: str) -> list[dict[str, Any]]:
-    """Execute a statement on the warehouse and return rows as dicts."""
+def _run(statement: str, params: Optional[dict[str, Any]] = None) -> list[dict[str, Any]]:
+    """Execute a parameterized statement on the warehouse; return rows as dicts.
+
+    `statement` uses named markers (:name); `params` binds them safely so user
+    input is never concatenated into SQL.
+    """
     resp = _ws().statement_execution.execute_statement(
         warehouse_id=WAREHOUSE_ID,
         statement=statement,
+        parameters=_params(params),
         wait_timeout="50s",
     )
     result = resp.result
@@ -67,6 +83,15 @@ def _run(statement: str) -> list[dict[str, Any]]:
         return []
     cols = [c.name for c in resp.manifest.schema.columns]
     return [dict(zip(cols, row)) for row in result.data_array]
+
+
+# Shared projection so list + single-row reads stay identical.
+_SELECT_COLS = (
+    "report_id, title, category, linked_anomaly, mpan_id, priority, "
+    "status, assignee, description, actions, "
+    "date_format(created_at, \"yyyy-MM-dd'T'HH:mm:ssXXX\") AS created_at, "
+    "date_format(updated_at, \"yyyy-MM-dd'T'HH:mm:ssXXX\") AS updated_at"
+)
 
 
 def _row_to_report(r: dict[str, Any]) -> dict[str, Any]:
@@ -116,13 +141,7 @@ def health():
 
 @app.get("/api/reports")
 def list_reports():
-    rows = _run(
-        f"SELECT report_id, title, category, linked_anomaly, mpan_id, priority, "
-        f"status, assignee, description, actions, "
-        f"date_format(created_at, \"yyyy-MM-dd'T'HH:mm:ssXXX\") AS created_at, "
-        f"date_format(updated_at, \"yyyy-MM-dd'T'HH:mm:ssXXX\") AS updated_at "
-        f"FROM {TABLE} ORDER BY updated_at DESC"
-    )
+    rows = _run(f"SELECT {_SELECT_COLS} FROM {TABLE} ORDER BY updated_at DESC")
     return [_row_to_report(r) for r in rows]
 
 
@@ -135,15 +154,25 @@ def create_report(body: NewReport):
     next_seq = int(rows[0]["m"]) + 1 if rows else 1001
     report_id = f"RPT-{next_seq}"
     ts = _now()
-    actions = [{"ts": ts, "actor": "You", "action": "Report created"}]
-    actions_json = json.dumps(actions)
+    actions_json = json.dumps([{"ts": ts, "actor": "You", "action": "Report created"}])
 
     _run(
-        f"INSERT INTO {TABLE} VALUES ("
-        f"{_sql_str(report_id)}, {_sql_str(body.title)}, {_sql_str(body.category)}, "
-        f"NULL, {_sql_str(body.mpan_id)}, {_sql_str(body.priority)}, 'open', "
-        f"{_sql_str(body.assignee)}, {_sql_str(body.description)}, {_sql_str(actions_json)}, "
-        f"{_sql_str(ts)}::timestamp, {_sql_str(ts)}::timestamp)"
+        f"INSERT INTO {TABLE} "
+        f"(report_id, title, category, linked_anomaly, mpan_id, priority, status, "
+        f"assignee, description, actions, created_at, updated_at) VALUES "
+        f"(:report_id, :title, :category, NULL, :mpan_id, :priority, 'open', "
+        f":assignee, :description, :actions, :ts::timestamp, :ts::timestamp)",
+        {
+            "report_id": report_id,
+            "title": body.title,
+            "category": body.category,
+            "mpan_id": body.mpan_id,
+            "priority": body.priority,
+            "assignee": body.assignee,
+            "description": body.description,
+            "actions": actions_json,
+            "ts": ts,
+        },
     )
     return _row_to_report(
         {
@@ -165,29 +194,27 @@ def create_report(body: NewReport):
 
 @app.post("/api/reports/{report_id}/actions")
 def add_action(report_id: str, body: NewAction):
-    rows = _run(f"SELECT actions FROM {TABLE} WHERE report_id = {_sql_str(report_id)}")
+    # Read the row we're mutating (need existing actions + fields to return).
+    rows = _run(f"SELECT {_SELECT_COLS} FROM {TABLE} WHERE report_id = :id", {"id": report_id})
     if not rows:
         raise HTTPException(status_code=404, detail="Report not found")
+    current = rows[0]
     try:
-        actions = json.loads(rows[0]["actions"]) if rows[0]["actions"] else []
+        actions = json.loads(current["actions"]) if current["actions"] else []
     except (json.JSONDecodeError, TypeError):
         actions = []
     ts = _now()
     actions.append({"ts": ts, "actor": body.actor, "action": body.action, "note": body.note})
     actions_json = json.dumps(actions)
+
     _run(
-        f"UPDATE {TABLE} SET status = {_sql_str(body.status)}, "
-        f"actions = {_sql_str(actions_json)}, updated_at = {_sql_str(ts)}::timestamp "
-        f"WHERE report_id = {_sql_str(report_id)}"
+        f"UPDATE {TABLE} SET status = :status, actions = :actions, "
+        f"updated_at = :ts::timestamp WHERE report_id = :id",
+        {"status": body.status, "actions": actions_json, "ts": ts, "id": report_id},
     )
-    rows = _run(
-        f"SELECT report_id, title, category, linked_anomaly, mpan_id, priority, "
-        f"status, assignee, description, actions, "
-        f"date_format(created_at, \"yyyy-MM-dd'T'HH:mm:ssXXX\") AS created_at, "
-        f"date_format(updated_at, \"yyyy-MM-dd'T'HH:mm:ssXXX\") AS updated_at "
-        f"FROM {TABLE} WHERE report_id = {_sql_str(report_id)}"
-    )
-    return _row_to_report(rows[0])
+    # No re-SELECT: we already hold the row and know exactly what changed.
+    current.update(status=body.status, actions=actions_json, updated_at=ts)
+    return _row_to_report(current)
 
 
 # --- Static frontend (must be mounted last) ---------------------------------

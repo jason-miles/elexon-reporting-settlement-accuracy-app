@@ -68,8 +68,23 @@ log "Building frontend"
 ( cd frontend && npm ci && npm run build )
 
 # ---- 2. Sync to workspace --------------------------------------------------
-log "Syncing source to workspace"
-databricks sync frontend "$APP_SOURCE" --profile "$PROFILE" --full
+# Ship the locally-built dist/ (normally gitignored) so the app serves static
+# files and the runtime only launches uvicorn — no fragile server-side npm build.
+# Force-include dist/ but keep node_modules OUT (a partial upload breaks the
+# platform's own npm install with ENOTEMPTY).
+# Wipe the workspace app dir first so stale Node artifacts (package.json,
+# node_modules, src/) from earlier deploys don't linger and trigger the
+# platform's npm install. Then sync only what the Python runtime needs.
+log "Clearing stale workspace app dir"
+databricks workspace delete "$APP_SOURCE" --recursive --profile "$PROFILE" 2>/dev/null || true
+
+log "Syncing built dist/ + Python backend (no Node artifacts) to workspace"
+databricks sync frontend "$APP_SOURCE" --profile "$PROFILE" --full \
+  --include 'dist/**' \
+  --exclude 'node_modules/**' \
+  --exclude 'package.json' --exclude 'package-lock.json' \
+  --exclude 'src/**' --exclude 'start-server.js' \
+  --exclude 'tsconfig.json' --exclude 'vite.config.ts'
 
 # ---- 3. Create + deploy app ------------------------------------------------
 log "Creating app (idempotent)"
