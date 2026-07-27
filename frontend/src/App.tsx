@@ -7,6 +7,7 @@ import PageLoader from './components/PageLoader'
 // own chunk, so the initial load only pulls the shell + the first route.
 const Overview = lazy(() => import('./pages/Overview'))
 const BusinessOverview = lazy(() => import('./pages/BusinessOverview'))
+const Architecture = lazy(() => import('./pages/Architecture'))
 const StreamingAnomalies = lazy(() => import('./pages/StreamingAnomalies'))
 const ReportsActions = lazy(() => import('./pages/ReportsActions'))
 const GovernanceConsent = lazy(() => import('./pages/GovernanceConsent'))
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Overview />} />
           <Route path="/business-overview" element={<BusinessOverview />} />
+          <Route path="/architecture" element={<Architecture />} />
           <Route path="/streaming-anomalies" element={<StreamingAnomalies />} />
           <Route path="/reports-actions" element={<ReportsActions />} />
           <Route path="/governance-consent" element={<GovernanceConsent />} />

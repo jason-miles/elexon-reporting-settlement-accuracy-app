@@ -19,9 +19,14 @@ purpose-based access, Delta Sharing, and natural-language Q&A (Genie).
 - **GitHub:** `git@github.com:jason-miles/elexon-reporting-settlement-accuracy-app.git` (branch `main`)
 - **Data is 100% synthetic.** No real Elexon / smart-meter data. Catalog: `elexon_app_for_settlement_acc_catalog`.
 
-### Frontend tabs (7)
-`Overview` · `Business Overview` · `Streaming Anomalies` · `Reports & Actions` ·
+### Frontend tabs (8)
+`Overview` · `Business Overview` · `Architecture` · `Streaming Anomalies` · `Reports & Actions` ·
 `Governance & Consent` · `Data Sharing` · `Ask a Question`
+
+The **Architecture** tab (`frontend/src/pages/Architecture.tsx`) is a static explainer: a
+Databricks Well-Architected reference-architecture poster (Data Sources → Ingest & ETL →
+Storage/Medallion → Serving & Orchestration → Databricks App, over a unified-governance
+foundation) plus the six WAF pillars mapped to this app. Pure presentation — no data deps.
 
 Only **Reports & Actions** is backed by live data (see §4). The rest use mock data in
 `frontend/src/utils/mockData.ts` — this is intentional for a demo; the pipeline notebooks
