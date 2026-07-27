@@ -265,3 +265,223 @@
   color: var(--elexon-gray-600);
   line-height: 1.5;
 }
+
+/* ============ Lakehouse cloud reference diagram ============ */
+.sectionLead {
+  color: var(--elexon-gray-600);
+  font-size: 0.95rem;
+  margin: 0 0 1.25rem 0;
+  max-width: 70ch;
+}
+
+.lakehouse {
+  background: var(--elexon-off-white);
+  border: 1px solid var(--elexon-gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elexon-shadow-sm);
+  padding: 1.25rem 1.35rem 1.5rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+}
+
+.lhTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--elexon-gray-900);
+  margin-bottom: 1.1rem;
+}
+.lhLogo {
+  color: var(--elexon-red);
+  font-size: 1.4rem;
+}
+
+.lhBody {
+  display: grid;
+  grid-template-columns: 200px 1fr 210px;
+  gap: 1rem;
+  align-items: stretch;
+  min-width: 900px;
+}
+
+/* Sources sidebar */
+.lhSources {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.lhSourceGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.78rem;
+  color: var(--elexon-gray-600);
+  padding-left: 0.85rem;
+  border-left: 2px solid var(--elexon-gray-300);
+}
+.lhAxis {
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--elexon-gray-400);
+}
+.lhSrcHead {
+  font-weight: 700;
+  color: var(--elexon-info);
+  font-size: 0.8rem;
+  margin-top: 0.1rem;
+}
+.lhIngestNode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  background: #efe7fb;
+  color: #6741d9;
+  font-weight: 700;
+  font-size: 0.82rem;
+  border: 1px solid #d0bfff;
+}
+.lhIngestNode span {
+  font-weight: 500;
+  font-size: 0.68rem;
+  color: #7048e8;
+}
+
+/* Zones column */
+.lhZones {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.lhZone {
+  position: relative;
+  border: 2px dashed var(--elexon-gray-400);
+  border-radius: var(--radius);
+  padding: 1.5rem 0.9rem 0.9rem;
+  background: rgba(255, 255, 255, 0.6);
+}
+.lhZoneLabel {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--elexon-gray-700);
+}
+.lhRow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.lhNode {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--radius-sm);
+  background: var(--elexon-white);
+  border: 1px solid var(--elexon-gray-200);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--elexon-gray-900);
+  box-shadow: var(--elexon-shadow-sm);
+}
+.lhNode span {
+  font-size: 0.66rem;
+  font-weight: 500;
+  color: var(--elexon-gray-500);
+}
+.lhNodeCloud {
+  border-color: var(--elexon-red-light);
+  background: var(--elexon-red-50);
+}
+.lhArrow {
+  color: #2f9e44;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+/* Medallion Delta boxes */
+.lhDelta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--elexon-white);
+  border: 1.5px solid #4dabf7;
+  min-width: 96px;
+}
+.lhDeltaTitle { font-size: 0.82rem; font-weight: 700; color: var(--elexon-gray-900); }
+.lhDeltaTier { font-size: 0.72rem; color: var(--elexon-gray-500); }
+.lhDeltaTag {
+  margin-top: 0.2rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #1971c2;
+}
+.lhStorage {
+  margin-top: 0.25rem;
+  font-size: 0.66rem;
+  color: var(--elexon-gray-500);
+  padding-top: 0.25rem;
+  border-top: 1px dashed var(--elexon-gray-200);
+  width: 100%;
+}
+.lhEtl {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #2f9e44;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+.lhEtl em {
+  font-style: normal;
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--elexon-gray-500);
+}
+
+/* SQL / Apps zone (right) */
+.lhSqlZone {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-top: 1.6rem;
+  border-color: var(--elexon-gray-400);
+}
+.lhSqlItem {
+  background: #495057;
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.45rem 0.5rem;
+  border-radius: 6px;
+}
+.lhSqlItem:first-of-type {
+  background: var(--elexon-red);
+}
+.lhBi {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  color: var(--elexon-gray-500);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .lhBody { grid-template-columns: 1fr; }
+}

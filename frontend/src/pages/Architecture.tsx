@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import PageHero from '../components/PageHero'
 import Callout from '../components/Callout'
 import styles from './Architecture.module.css'
@@ -92,6 +93,118 @@ function NodeCard({ n }: { n: Node }) {
 
 function ColHead({ children }: { children: string }) {
   return <h2 className={styles.colHead}>{children}</h2>
+}
+
+/* ---------- Classic lakehouse reference diagram (per cloud) ---------- */
+interface CloudSpec {
+  name: string
+  accent: string // css var or hex for the "+ cloud" wordmark
+  ingest: string // streaming ingestion service
+  storage: string // object storage under Delta
+  serving: string // real-time inference target
+  bi: string[] // BI tools on the right
+}
+
+const clouds: CloudSpec[] = [
+  {
+    name: 'AWS',
+    accent: '#ff9900',
+    ingest: 'Amazon Kinesis',
+    storage: 'Amazon S3',
+    serving: 'AWS ECS / SageMaker',
+    bi: ['Tableau', 'AI/BI', 'Looker'],
+  },
+  {
+    name: 'Azure',
+    accent: '#0078d4',
+    ingest: 'Event Hubs',
+    storage: 'ADLS Gen2',
+    serving: 'Azure ML',
+    bi: ['Tableau', 'Redash', 'Power BI'],
+  },
+]
+
+function LakehouseDiagram({ c }: { c: CloudSpec }) {
+  const medallion = [
+    { t: 'Raw Data', s: 'Bronze' },
+    { t: 'Refined Data', s: 'Silver' },
+    { t: 'Enriched Data', s: 'Gold' },
+  ]
+  return (
+    <div className={styles.lakehouse}>
+      <div className={styles.lhTitle}>
+        <span className={styles.lhLogo} aria-hidden="true">▤</span>
+        databricks <span style={{ color: c.accent }}>+ {c.name}</span>
+      </div>
+
+      <div className={styles.lhBody}>
+        {/* Sources sidebar */}
+        <div className={styles.lhSources}>
+          <div className={styles.lhSourceGroup}>
+            <span className={styles.lhAxis}>Batch</span>
+            <span className={styles.lhSrcHead}>Structured</span>
+            <span>Settlement / BSC</span>
+            <span>Supplier registry</span>
+            <span>Meter reference</span>
+          </div>
+          <div className={styles.lhSourceGroup}>
+            <span className={styles.lhAxis}>Streaming</span>
+            <span className={styles.lhSrcHead}>Unstructured</span>
+            <span>Half-hourly reads</span>
+            <span>Grid / IoT events</span>
+            <span>Maintenance logs</span>
+          </div>
+          <div className={styles.lhIngestNode}>{c.ingest}<span>ingestion</span></div>
+        </div>
+
+        {/* Zones */}
+        <div className={styles.lhZones}>
+          {/* ML zone */}
+          <div className={styles.lhZone}>
+            <span className={styles.lhZoneLabel}>Databricks Machine Learning</span>
+            <div className={styles.lhRow}>
+              <div className={styles.lhNode}>Notebooks<span>ML Runtime</span></div>
+              <span className={styles.lhArrow}>→</span>
+              <div className={styles.lhNode}>MLflow<span>Tracking</span></div>
+              <span className={styles.lhArrow}>→</span>
+              <div className={styles.lhNode}>MLflow<span>Registry</span></div>
+              <span className={styles.lhArrow}>⇢</span>
+              <div className={`${styles.lhNode} ${styles.lhNodeCloud}`}>{c.serving}<span>real-time inference</span></div>
+            </div>
+          </div>
+
+          {/* Data Engineering zone — medallion */}
+          <div className={styles.lhZone}>
+            <span className={styles.lhZoneLabel}>Databricks Data Engineering</span>
+            <div className={styles.lhRow}>
+              {medallion.map((m, i) => (
+                <Fragment key={m.s}>
+                  <div className={styles.lhDelta}>
+                    <span className={styles.lhDeltaTitle}>{m.t}</span>
+                    <span className={styles.lhDeltaTier}>({m.s})</span>
+                    <span className={styles.lhDeltaTag}>Delta Lake</span>
+                    <span className={styles.lhStorage}>{c.storage}</span>
+                  </div>
+                  {i < medallion.length - 1 && (
+                    <span className={styles.lhEtl}>→<em>Spark ETL</em></span>
+                  )}
+                </Fragment>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Databricks SQL / serving zone */}
+        <div className={`${styles.lhZone} ${styles.lhSqlZone}`}>
+          <span className={styles.lhZoneLabel}>Databricks SQL &amp; Apps</span>
+          {['This app (Databricks App)', 'AI/BI Dashboards', 'Data Catalog (UC)', 'Alerts', 'Integrated security', 'SQL editor'].map((x) => (
+            <div key={x} className={styles.lhSqlItem}>{x}</div>
+          ))}
+          <div className={styles.lhBi}>{c.bi.join(' · ')}</div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default function Architecture() {
@@ -199,6 +312,18 @@ export default function Architecture() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* ---------- Cloud reference diagrams ---------- */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>Deploy on any cloud — the same lakehouse</h2>
+        <p className={styles.sectionLead}>
+          The identical medallion + ML + SQL architecture runs on AWS or Azure; only the cloud-native
+          ingestion, object storage, and serving targets swap out. Unity Catalog governs it all.
+        </p>
+        {clouds.map((c) => (
+          <LakehouseDiagram key={c.name} c={c} />
+        ))}
       </section>
 
       <Callout title="Everything on one platform" variant="success">
