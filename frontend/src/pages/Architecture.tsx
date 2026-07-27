@@ -164,11 +164,11 @@ function LakehouseDiagram({ c }: { c: CloudSpec }) {
             <span className={styles.lhZoneLabel}>Databricks Machine Learning</span>
             <div className={styles.lhRow}>
               <div className={styles.lhNode}>Notebooks<span>ML Runtime</span></div>
-              <span className={styles.lhArrow}>→</span>
+              <span className={styles.lhArrow} aria-hidden="true">→</span>
               <div className={styles.lhNode}>MLflow<span>Tracking</span></div>
-              <span className={styles.lhArrow}>→</span>
+              <span className={styles.lhArrow} aria-hidden="true">→</span>
               <div className={styles.lhNode}>MLflow<span>Registry</span></div>
-              <span className={styles.lhArrow}>⇢</span>
+              <span className={styles.lhArrow} aria-hidden="true">⇢</span>
               <div className={`${styles.lhNode} ${styles.lhNodeCloud}`}>{c.serving}<span>real-time inference</span></div>
             </div>
           </div>
@@ -186,7 +186,10 @@ function LakehouseDiagram({ c }: { c: CloudSpec }) {
                     <span className={styles.lhStorage}>{c.storage}</span>
                   </div>
                   {i < medallion.length - 1 && (
-                    <span className={styles.lhEtl}>→<em>Spark ETL</em></span>
+                    <span className={styles.lhEtl}>
+                      <span aria-hidden="true">→</span>
+                      <em>Spark ETL</em>
+                    </span>
                   )}
                 </Fragment>
               ))}
