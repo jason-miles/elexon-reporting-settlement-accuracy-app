@@ -219,12 +219,20 @@ def add_action(report_id: str, body: NewAction):
 
 # --- Static frontend (must be mounted last) ---------------------------------
 if os.path.isdir(DIST_DIR):
+    _DIST_REAL = os.path.realpath(DIST_DIR)
+    _INDEX = os.path.join(_DIST_REAL, "index.html")
     app.mount("/assets", StaticFiles(directory=os.path.join(DIST_DIR, "assets")), name="assets")
 
     @app.get("/{full_path:path}")
     def spa(full_path: str):
-        # Serve real files; otherwise fall back to index.html for client routing.
-        candidate = os.path.join(DIST_DIR, full_path)
-        if full_path and os.path.isfile(candidate):
-            return FileResponse(candidate)
-        return FileResponse(os.path.join(DIST_DIR, "index.html"))
+        # Serve real files, but only ones that resolve INSIDE dist/ — guards
+        # against path traversal (e.g. ../../etc/passwd). Anything else falls
+        # back to index.html for client-side routing.
+        if full_path:
+            candidate = os.path.realpath(os.path.join(_DIST_REAL, full_path))
+            if (
+                (candidate == _DIST_REAL or candidate.startswith(_DIST_REAL + os.sep))
+                and os.path.isfile(candidate)
+            ):
+                return FileResponse(candidate)
+        return FileResponse(_INDEX)
