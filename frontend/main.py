@@ -15,7 +15,7 @@ from __future__ import annotations
 import json
 import os
 from datetime import datetime, timezone
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
@@ -117,18 +117,22 @@ def _row_to_report(r: dict[str, Any]) -> dict[str, Any]:
 
 
 # --- Models -----------------------------------------------------------------
+Priority = Literal["high", "medium", "low"]
+Status = Literal["open", "investigating", "escalated", "resolved"]
+
+
 class NewReport(BaseModel):
     title: str
     category: str
     mpan_id: str = "***----"
-    priority: str = "medium"
+    priority: Priority = "medium"
     assignee: str = "Unassigned"
     description: str = ""
 
 
 class NewAction(BaseModel):
     action: str
-    status: str
+    status: Status
     actor: str = "You"
     note: Optional[str] = None
 
@@ -141,7 +145,7 @@ def health():
 
 @app.get("/api/reports")
 def list_reports():
-    rows = _run(f"SELECT {_SELECT_COLS} FROM {TABLE} ORDER BY updated_at DESC")
+    rows = _run(f"SELECT {_SELECT_COLS} FROM {TABLE} ORDER BY updated_at DESC LIMIT 500")
     return [_row_to_report(r) for r in rows]
 
 
